@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ar.com.ada.backend12</groupId>
 	<artifactId>CarRental</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>CarRental</name>
 	<description>Ada final assignment - Car Rental API</description>
 	<properties>
