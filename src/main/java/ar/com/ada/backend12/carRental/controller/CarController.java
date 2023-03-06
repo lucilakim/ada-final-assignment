@@ -10,12 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.Year;
+import java.util.Optional;
 
 
 @RestController
@@ -59,7 +58,26 @@ public class CarController {
             logger.error("Error registering the car in controller.");
             return new ResponseEntity<ApiReturnable>(new ApiMessage("Error trying to register the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         return new ResponseEntity<ApiReturnable>(c, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/car/{plate}")
+    private ResponseEntity<ApiReturnable> get(
+            @PathVariable(name = "plate") String plate
+    ){
+        Optional<Car> optionalCar;
+        try{
+            optionalCar = carService.get(plate);
+        } catch (Exception e) {
+            logger.error("Error getting the car from CarController.");
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("Error trying to register the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(!optionalCar.isEmpty()) {
+            Car car = optionalCar.get();
+            return new ResponseEntity<ApiReturnable>(car, HttpStatus.OK);
+        } else {
+            return NOT_FOUND;
+        }
     }
 }

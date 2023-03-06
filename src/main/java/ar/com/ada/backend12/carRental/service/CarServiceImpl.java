@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarServiceImpl implements CarService{
@@ -28,9 +30,18 @@ public class CarServiceImpl implements CarService{
         }
     }
 
+
     @Override
-    public Car get(String plate) {
-        return null;
+    public Optional<Car> get(String plate) throws Exception{
+        try {
+            Optional<Car> optionalCar = carDAO.findByPlate(plate);
+            return optionalCar;
+        } catch (Exception ex) {
+            String exceptionMessage = "Error obtaining the car from CarService.";
+            logger.error(exceptionMessage, ex);
+            throw new Exception(exceptionMessage, ex);
+        }
+
     }
 
     @Override
