@@ -76,4 +76,15 @@ public class CarServiceImpl implements CarService{
         }
     }
 
+    @Override
+    public boolean delete(String plate) throws Exception {
+        Optional<Car> optionalCar = this.get(plate);
+
+        if (optionalCar.isPresent()) {
+            carDAO.delete(optionalCar.get());
+            return true;
+        }
+
+        return false;
+    }
 }

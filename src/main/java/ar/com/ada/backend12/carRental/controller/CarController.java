@@ -127,4 +127,20 @@ public class CarController {
         }
     }
 
+    @DeleteMapping("/car/{plate}")
+    private ResponseEntity<ApiReturnable> delete(
+            @PathVariable(name = "plate") String plate) {
+        try {
+            Boolean deleted = carService.delete(plate);
+            if(deleted){
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The car with license plate " + plate + " was successfully removed."),HttpStatus.OK);
+            } else {
+                return NOT_FOUND;
+            }
+
+        } catch (Exception e) {
+            logger.error("Failed to update the car in controller");
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred and we were unable to update the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
