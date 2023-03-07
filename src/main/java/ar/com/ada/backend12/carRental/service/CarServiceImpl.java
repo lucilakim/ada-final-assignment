@@ -83,7 +83,6 @@ public class CarServiceImpl implements CarService{
             logger.error(exceptionMessage, e);
             throw new Exception(exceptionMessage, e);
         }
-
     }
 
     @Override

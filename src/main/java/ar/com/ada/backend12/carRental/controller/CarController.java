@@ -132,7 +132,6 @@ public class CarController {
             logger.error("Error obtaining the cars.");
             return new ResponseEntity<ApiReturnable>(new ApiMessage("Error getting the cars. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @DeleteMapping("/car/{plate}")
@@ -148,8 +147,8 @@ public class CarController {
                 return NOT_FOUND;
             }
         } catch (Exception e) {
-            logger.error("Failed to update the car in controller");
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred and we were unable to update the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error("Failed to delete the car in controller");
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred and we were unable to delete the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
