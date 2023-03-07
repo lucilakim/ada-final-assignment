@@ -29,12 +29,14 @@ public class Customer implements ApiReturnable {
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, Date birthDate, Integer idCardNumber, String idCardExpiration) {
+    public Customer(Integer customerId, String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber) {
+        this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.idCardNumber = idCardNumber;
         this.idCardExpiration = idCardExpiration;
+        this.phoneNumber = phoneNumber;
     }
 
     public Integer getCustomerId() {
@@ -77,11 +79,19 @@ public class Customer implements ApiReturnable {
         this.idCardNumber = idCardNumber;
     }
 
-    public String getIdCardExpiration() {
+    public Date getIdCardExpiration() {
         return idCardExpiration;
     }
 
-    public void setIdCardExpiration(String idCardExpiration) {
+    public void setIdCardExpiration(Date idCardExpiration) {
         this.idCardExpiration = idCardExpiration;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
