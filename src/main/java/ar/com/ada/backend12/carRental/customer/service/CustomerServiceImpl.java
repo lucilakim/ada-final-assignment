@@ -21,8 +21,15 @@ public class CustomerServiceImpl implements CustomerService{
     CustomerDAO customerDAO;
 
     @Override
-    public Customer save(String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber) {
-        return null;
+    public Customer save(Customer c) throws Exception{
+        logger.info("Trying to insert a customer");
+        try {
+            Customer customer = customerDAO.save(c);
+            return customer;
+        } catch (Exception e){
+            logger.error("An error has occurred trying to enter a user");
+            throw new Exception();
+        }
     }
 
     @Override

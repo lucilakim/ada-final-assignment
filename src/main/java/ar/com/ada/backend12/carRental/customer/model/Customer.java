@@ -29,8 +29,7 @@ public class Customer implements ApiReturnable {
     public Customer() {
     }
 
-    public Customer(Integer customerId, String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber) {
-        this.customerId = customerId;
+    public Customer(String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;

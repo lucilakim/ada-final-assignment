@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Optional;
 
 public interface CustomerService {
-    public Customer save(String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber);
+    public Customer save(Customer customer) throws Exception;
     public Customer update(String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber);
     public Optional<Customer> get(Integer idCardNumber);
     public CustomerList getAll();
