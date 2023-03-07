@@ -1,8 +1,8 @@
-package ar.com.ada.backend12.carRental.controller;
+package ar.com.ada.backend12.carRental.car.controller;
 
-import ar.com.ada.backend12.carRental.model.Car;
-import ar.com.ada.backend12.carRental.model.CarList;
-import ar.com.ada.backend12.carRental.service.CarService;
+import ar.com.ada.backend12.carRental.car.model.Car;
+import ar.com.ada.backend12.carRental.car.model.CarList;
+import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.util.ApiMessage;
 import ar.com.ada.backend12.carRental.util.ApiReturnable;
 import org.slf4j.Logger;

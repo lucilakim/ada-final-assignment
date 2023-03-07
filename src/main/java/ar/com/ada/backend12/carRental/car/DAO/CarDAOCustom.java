@@ -1,6 +1,6 @@
-package ar.com.ada.backend12.carRental.DAO;
+package ar.com.ada.backend12.carRental.car.DAO;
 
-import ar.com.ada.backend12.carRental.model.Car;
+import ar.com.ada.backend12.carRental.car.model.Car;
 
 import java.math.BigDecimal;
 import java.util.List;

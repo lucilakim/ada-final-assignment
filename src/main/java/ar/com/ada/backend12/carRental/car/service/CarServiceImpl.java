@@ -1,8 +1,8 @@
-package ar.com.ada.backend12.carRental.service;
+package ar.com.ada.backend12.carRental.car.service;
 
-import ar.com.ada.backend12.carRental.DAO.CarDAO;
-import ar.com.ada.backend12.carRental.model.Car;
-import ar.com.ada.backend12.carRental.model.CarList;
+import ar.com.ada.backend12.carRental.car.DAO.CarDAO;
+import ar.com.ada.backend12.carRental.car.model.CarList;
+import ar.com.ada.backend12.carRental.car.model.Car;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

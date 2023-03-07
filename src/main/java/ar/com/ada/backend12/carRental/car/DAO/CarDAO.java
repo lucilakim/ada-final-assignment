@@ -1,6 +1,6 @@
-package ar.com.ada.backend12.carRental.DAO;
+package ar.com.ada.backend12.carRental.car.DAO;
 
-import ar.com.ada.backend12.carRental.model.Car;
+import ar.com.ada.backend12.carRental.car.model.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

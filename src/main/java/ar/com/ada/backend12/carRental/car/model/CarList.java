@@ -1,4 +1,4 @@
-package ar.com.ada.backend12.carRental.model;
+package ar.com.ada.backend12.carRental.car.model;
 
 import ar.com.ada.backend12.carRental.util.ApiReturnable;
 
