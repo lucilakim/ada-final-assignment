@@ -38,8 +38,13 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Optional<Customer> get(Integer idCardNumber) {
-        return Optional.empty();
+    public Optional<Customer> get(Integer idCardNumber) throws Exception{
+        try {
+            return customerDAO.findByIdCardNumber(idCardNumber);
+        } catch (Exception e) {
+            logger.error("An error occurred trying to get a customer by idCardNumber: " + idCardNumber);
+            throw new Exception();
+        }
     }
 
     @Override

@@ -12,11 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.Optional;
 
 @RestController
 public class CustomerController {
@@ -63,5 +62,23 @@ public class CustomerController {
             logger.error("An error has occurred trying to enter a user");
             return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the client could not be entered. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/customer/{idCardNumber}")
+    private ResponseEntity<ApiReturnable> get(
+            @PathVariable(name = "idCardNumber") Integer idCardNumber) {
+        try {
+            Optional<Customer> optionalCustomer = customerService.get(idCardNumber);
+            if(optionalCustomer.isPresent()){
+                Customer customer = optionalCustomer.get();
+                return new ResponseEntity<ApiReturnable>(customer, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("Customer not found."), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            logger.error("An error occurred trying to get a customer by idCardNumber: " + idCardNumber);
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("An error occurred trying to get a customer by idCardNumber: " + idCardNumber + ". Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

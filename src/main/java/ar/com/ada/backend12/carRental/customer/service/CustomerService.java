@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface CustomerService {
     public Customer save(Customer customer) throws Exception;
     public Customer update(String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber);
-    public Optional<Customer> get(Integer idCardNumber);
+    public Optional<Customer> get(Integer idCardNumber) throws Exception;
     public CustomerList getAll();
     public boolean delete(Integer idCardNumber);
 }
