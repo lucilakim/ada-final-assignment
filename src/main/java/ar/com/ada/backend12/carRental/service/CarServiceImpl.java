@@ -7,10 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,8 +34,7 @@ public class CarServiceImpl implements CarService{
     @Override
     public Optional<Car> get(String plate) throws Exception{
         try {
-            Optional<Car> optionalCar = carDAO.findByPlate(plate);
-            return optionalCar;
+            return carDAO.findByPlate(plate);
         } catch (Exception ex) {
             String exceptionMessage = "Error obtaining the car from CarService.";
             logger.error(exceptionMessage, ex);
@@ -53,11 +50,30 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public Car update(String plate, Car c) throws Exception {
-        return null;
+        Optional<Car> currentCar = this.get(plate);
+
+        if(currentCar.isPresent()){
+            Car updatedCar = currentCar.get();
+            if(c.getBrand() != null) {updatedCar.setBrand(c.getBrand());}
+            if(c.getModel() != null) {updatedCar.setModel(c.getModel());}
+            if(c.getYear() != null) {updatedCar.setYear(c.getYear());}
+            if(c.getColor() != null) {updatedCar.setColor(c.getColor());}
+            if(c.getTypeId() != null) {updatedCar.setTypeId(c.getTypeId());}
+            if(c.getPassengersNumber() != null) {updatedCar.setPassengersNumber(c.getPassengersNumber());}
+            if(c.getMileage() != null) {updatedCar.setMileage(c.getMileage());}
+            if(c.getAirConditioning() != null) {updatedCar.setAirConditioning(c.getAirConditioning());}
+            if(c.getDailyRent() != null) {updatedCar.setDailyRent(c.getDailyRent());}
+
+            try{
+                return carDAO.save(updatedCar);
+            } catch (Exception e) {
+                String exceptionMessage = "Failed to update the car in service";
+                logger.error(exceptionMessage, e);
+                throw new Exception(exceptionMessage, e);
+            }
+        } else {
+            return null;
+        }
     }
 
-    @Override
-    public boolean delete(String plate) throws Exception {
-        return false;
-    }
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.Year;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -32,9 +31,6 @@ public class CarController {
 
     @Autowired
     private CarService carService;
-
-    @Autowired
-    private DateValidator dateValidator;
 
     @PostMapping("/car")
     public ResponseEntity<ApiReturnable> save(
@@ -101,6 +97,34 @@ public class CarController {
             return CARS_NOT_FOUND;
         }
 
+    }
+
+    @PatchMapping("/car/{plate}")
+    private ResponseEntity<ApiReturnable> update(
+            @RequestParam(name = "brand", required = false) String brand
+            ,@RequestParam(name = "model", required = false) String model
+            ,@RequestParam(name = "year", required = false) Year year
+            ,@RequestParam(name = "color", required = false) String color
+            ,@RequestParam(name = "typeId", required = false) Integer typeId
+            ,@RequestParam(name = "plate") String plate
+            ,@RequestParam(name = "passengersNumber", required = false) Integer passengersNumber
+            ,@RequestParam(name = "mileage", required = false) Integer mileage
+            ,@RequestParam(name = "airConditioning", required = false) String airConditioning
+            ,@RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
+    ){
+        Car car = new Car(brand,model,year,color,typeId,plate,passengersNumber,mileage,airConditioning,dailyRent);
+
+        try{
+            Car updatedCar = carService.update(plate, car);
+            if(updatedCar != null) {
+                return new ResponseEntity<ApiReturnable>(updatedCar, HttpStatus.OK);
+            } else {
+                return NOT_FOUND;
+            }
+        } catch (Exception e) {
+            logger.error("Failed to update the car in controller");
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred and we were unable to update the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
