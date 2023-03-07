@@ -21,7 +21,10 @@ public class Customer implements ApiReturnable {
     @Column(name = "IDENTITY_CARD_NUMBER")
     private Integer idCardNumber;
     @Column(name = "IDENTITY_CARD_EXPIRATION")
-    private String idCardExpiration;
+    private Date idCardExpiration;
+
+    @Column(name = "PHONE_NUMBER")
+    private String phoneNumber;
 
     public Customer() {
     }
