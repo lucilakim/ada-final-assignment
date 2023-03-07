@@ -2,12 +2,14 @@ package ar.com.ada.backend12.carRental.service;
 
 import ar.com.ada.backend12.carRental.DAO.CarDAO;
 import ar.com.ada.backend12.carRental.model.Car;
+import ar.com.ada.backend12.carRental.model.CarList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +47,8 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public List<Car> getAll() throws Exception {
-        return null;
+    public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
+        return new CarList(carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent));
     }
 
     @Override

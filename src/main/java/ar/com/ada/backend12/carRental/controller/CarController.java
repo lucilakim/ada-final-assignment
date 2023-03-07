@@ -1,6 +1,7 @@
 package ar.com.ada.backend12.carRental.controller;
 
 import ar.com.ada.backend12.carRental.model.Car;
+import ar.com.ada.backend12.carRental.model.CarList;
 import ar.com.ada.backend12.carRental.service.CarService;
 import ar.com.ada.backend12.carRental.util.ApiMessage;
 import ar.com.ada.backend12.carRental.util.ApiReturnable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.Year;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,6 +25,8 @@ public class CarController {
 
     private static final ResponseEntity<ApiReturnable> NOT_FOUND =
             new ResponseEntity<ApiReturnable>(new ApiMessage("Car not found."), HttpStatus.NOT_FOUND);
+    private static final ResponseEntity<ApiReturnable> CARS_NOT_FOUND =
+            new ResponseEntity<ApiReturnable>(new ApiMessage("No cars were found with these specifications."), HttpStatus.NOT_FOUND);
     private static final ResponseEntity<ApiReturnable> ERROR_MESSAGE_500 =
             new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred. Please try again."), HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -80,4 +84,23 @@ public class CarController {
             return NOT_FOUND;
         }
     }
+
+    @GetMapping("/car")
+    private ResponseEntity<ApiReturnable> getAll(
+              @RequestParam(name = "typeId" , required = false) Integer typeId
+             ,@RequestParam(name = "passengersNumber", required = false) Integer passengersNumber
+             ,@RequestParam(name = "airConditioning", required = false) String airConditioning
+             ,@RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
+             //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
+    ){
+        CarList carList = carService.getAll(typeId, passengersNumber, airConditioning, dailyRent);
+
+        if (!carList.getCarList().isEmpty()){
+            return new ResponseEntity<ApiReturnable>(carList, HttpStatus.OK);
+        } else {
+            return CARS_NOT_FOUND;
+        }
+
+    }
+
 }
