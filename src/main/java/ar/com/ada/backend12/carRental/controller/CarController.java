@@ -62,7 +62,7 @@ public class CarController {
 
     @PatchMapping("/car/{plate}")
     private ResponseEntity<ApiReturnable> update(
-            @RequestParam(name = "plate") String plate
+            @PathVariable(name = "plate") String plate
             ,@RequestParam(name = "brand", required = false) String brand
             ,@RequestParam(name = "model", required = false) String model
             ,@RequestParam(name = "year", required = false) Year year
@@ -120,13 +120,19 @@ public class CarController {
              //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
     ){
         logger.info("Trying to get all Cars in the database.");
-        CarList carList = carService.getAll(typeId, passengersNumber, airConditioning, dailyRent);
 
-        if (!carList.getCarList().isEmpty()){
-            return new ResponseEntity<ApiReturnable>(carList, HttpStatus.OK);
-        } else {
-            return CARS_NOT_FOUND;
+        try {
+            CarList carList = carService.getAll(typeId, passengersNumber, airConditioning, dailyRent);
+            if (!carList.getCarList().isEmpty()){
+                return new ResponseEntity<ApiReturnable>(carList, HttpStatus.OK);
+            } else {
+                return CARS_NOT_FOUND;
+            }
+        } catch (Exception e) {
+            logger.error("Error obtaining the cars.");
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("Error getting the cars. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @DeleteMapping("/car/{plate}")

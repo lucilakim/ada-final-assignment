@@ -66,17 +66,24 @@ public class CarServiceImpl implements CarService{
         logger.debug("plate ["+ plate +"]");
         try {
             return carDAO.findByPlate(plate);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             String exceptionMessage = "Error obtaining the car from CarService.";
-            logger.error(exceptionMessage, ex);
-            throw new Exception(exceptionMessage, ex);
+            logger.error(exceptionMessage, e);
+            throw new Exception(exceptionMessage, e);
         }
     }
 
     @Override
-    public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
+    public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) throws Exception{
         logger.info("Trying to Get All cars.");
-        return new CarList(carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent));
+        try {
+            return new CarList(carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent));
+        } catch (Exception e) {
+            String exceptionMessage = "Error obtaining the car from CarService.";
+            logger.error(exceptionMessage, e);
+            throw new Exception(exceptionMessage, e);
+        }
+
     }
 
     @Override
