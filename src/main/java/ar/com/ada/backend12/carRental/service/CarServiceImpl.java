@@ -19,7 +19,8 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public Car save(Car c) throws Exception{
-        logger.info("Attempting to register a car.");
+        logger.info("Trying to insert a car.");
+        logger.debug("carId ["+ c.getCarId() +"]");
         try {
             carDAO.save(c);
             return c;
@@ -30,28 +31,12 @@ public class CarServiceImpl implements CarService{
         }
     }
 
-
-    @Override
-    public Optional<Car> get(String plate) throws Exception{
-        try {
-            return carDAO.findByPlate(plate);
-        } catch (Exception ex) {
-            String exceptionMessage = "Error obtaining the car from CarService.";
-            logger.error(exceptionMessage, ex);
-            throw new Exception(exceptionMessage, ex);
-        }
-
-    }
-
-    @Override
-    public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
-        return new CarList(carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent));
-    }
-
     @Override
     public Car update(String plate, Car c) throws Exception {
-        Optional<Car> currentCar = this.get(plate);
+        logger.info("Trying to Update a car.");
+        logger.debug("carId ["+ c.getCarId() +"]");
 
+        Optional<Car> currentCar = this.get(plate);
         if(currentCar.isPresent()){
             Car updatedCar = currentCar.get();
             if(c.getBrand() != null) {updatedCar.setBrand(c.getBrand());}
@@ -63,7 +48,6 @@ public class CarServiceImpl implements CarService{
             if(c.getMileage() != null) {updatedCar.setMileage(c.getMileage());}
             if(c.getAirConditioning() != null) {updatedCar.setAirConditioning(c.getAirConditioning());}
             if(c.getDailyRent() != null) {updatedCar.setDailyRent(c.getDailyRent());}
-
             try{
                 return carDAO.save(updatedCar);
             } catch (Exception e) {
@@ -77,14 +61,33 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public boolean delete(String plate) throws Exception {
-        Optional<Car> optionalCar = this.get(plate);
+    public Optional<Car> get(String plate) throws Exception{
+        logger.info("Trying to Get a car.");
+        logger.debug("plate ["+ plate +"]");
+        try {
+            return carDAO.findByPlate(plate);
+        } catch (Exception ex) {
+            String exceptionMessage = "Error obtaining the car from CarService.";
+            logger.error(exceptionMessage, ex);
+            throw new Exception(exceptionMessage, ex);
+        }
+    }
 
+    @Override
+    public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
+        logger.info("Trying to Get All cars.");
+        return new CarList(carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent));
+    }
+
+    @Override
+    public boolean delete(String plate) throws Exception {
+        logger.info("Trying to Delete a car.");
+        logger.debug("plate ["+ plate +"]");
+        Optional<Car> optionalCar = this.get(plate);
         if (optionalCar.isPresent()) {
             carDAO.delete(optionalCar.get());
             return true;
         }
-
         return false;
     }
 }
