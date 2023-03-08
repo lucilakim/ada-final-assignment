@@ -25,7 +25,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer update(Customer customer) {
-        return null;
+        Optional<Customer> currentCustomer = this.get(customer.getIdCardNumber());
+        if(currentCustomer.isPresent()) {
+            Customer updatedCustomer = currentCustomer.get();
+            if(customer.getFirstName() != null) { updatedCustomer.setFirstName(customer.getFirstName());}
+            if(customer.getLastName() != null) { updatedCustomer.setLastName(customer.getLastName());}
+            if(customer.getBirthDate() != null) { updatedCustomer.setBirthDate(customer.getBirthDate());}
+            if(customer.getIdCardExpiration() != null) { updatedCustomer.setIdCardExpiration(customer.getIdCardExpiration());}
+            if(customer.getPhoneNumber() != null) { updatedCustomer.setPhoneNumber(customer.getPhoneNumber());}
+
+            return customerDAO.save(updatedCustomer);
+        } else {
+            return null;
+        }
     }
 
     @Override

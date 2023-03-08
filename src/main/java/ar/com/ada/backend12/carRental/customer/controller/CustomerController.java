@@ -32,7 +32,7 @@ public class CustomerController {
 
     @PostMapping("/customer")
     private ResponseEntity<ApiReturnable> save(
-            @RequestParam(name = "fistName") String firstName
+            @RequestParam(name = "firstName") String firstName
             ,@RequestParam(name = "lastName") String lastName
             ,@RequestParam(name = "birthDate") String stringBirthDate
             ,@RequestParam(name = "idCardNumber") Integer idCardNumber
@@ -64,6 +64,57 @@ public class CustomerController {
         } catch (Exception e) {
             logger.error("An error has occurred trying to enter a user");
             return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the client could not be entered. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PatchMapping("/customer/{idCardNumber}")
+    private ResponseEntity<ApiReturnable> update(
+            @PathVariable(name = "idCardNumber") Integer idCardNumber
+            ,@RequestParam(name = "firstName", required = false) String firstName
+            ,@RequestParam(name = "lastName", required = false) String lastName
+            ,@RequestParam(name = "birthDate", required = false) String stringBirthDate
+            ,@RequestParam(name = "idCardExpiration", required = false) String stringIdCardExpiration
+            ,@RequestParam(name = "phoneNumber", required = false) String phoneNumber
+    ){
+        Date birthDate = null;
+        Date idCardExpiration = null;
+        if(stringBirthDate != null) {
+            if(dateValidator.isValid(stringBirthDate)){
+                try {
+                    birthDate = dateUtil.parseDate(stringBirthDate);
+                } catch (Exception e) {
+                    logger.error("Error trying to change the data type from string to date in birthDate", e);
+                    return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the Customer could not be updated."), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. " + stringBirthDate + " The expected format is yyyy-MM-dd in birthDate"), HttpStatus.BAD_REQUEST);
+            }
+        }
+        if(stringIdCardExpiration != null) {
+            if(dateValidator.isValid(stringIdCardExpiration)){
+                try {
+                    idCardExpiration = dateUtil.parseDate(stringIdCardExpiration);
+                } catch (Exception e) {
+                    logger.error("Error trying to change the data type from string to date in birthDate", e);
+                    return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the Customer could not be updated."), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. " + stringIdCardExpiration + " The expected format is yyyy-MM-dd in IdCardExpiration"), HttpStatus.BAD_REQUEST);
+            }
+        }
+        Customer customer = new Customer(firstName, lastName, birthDate, idCardNumber, idCardExpiration, phoneNumber);
+
+        try {
+            Customer updatedCustomer = customerService.update(customer);
+            if(updatedCustomer != null) {
+                return new ResponseEntity<ApiReturnable>(updatedCustomer, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The client with ID number " + idCardNumber + " was not found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            String errorMessage = "An error has occurred trying to enter a user with id: " + idCardNumber;
+            logger.error(errorMessage);
+            return new ResponseEntity<ApiReturnable>(new ApiMessage(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
