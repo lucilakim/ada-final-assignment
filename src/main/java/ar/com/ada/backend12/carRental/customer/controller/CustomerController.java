@@ -102,4 +102,25 @@ public class CustomerController {
             return new ResponseEntity<ApiReturnable>(new ApiMessage("An error occurred trying to get all the Customers. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/customer/{idCardNumber}")
+    private ResponseEntity<ApiReturnable> delete(
+            @PathVariable(name = "idCardNumber") Integer idCardNumber
+    ) {
+        logger.info("Trying to delete a customer");
+        logger.debug("idCardNumber ["+ idCardNumber +"]");
+
+        try {
+            Boolean isDeleted = customerService.delete(idCardNumber);
+            if(isDeleted) {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The client with identity card Number: " + idCardNumber + " was successfully deleted."), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The client with identity card Number: " + idCardNumber + " was not found."), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            String errorDeleteMessage = "An error has occurred, and the customer with idCardNumber: " + idCardNumber + " could not be deleted.";
+            logger.error(errorDeleteMessage);
+            return new ResponseEntity<ApiReturnable>(new ApiMessage(errorDeleteMessage), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
