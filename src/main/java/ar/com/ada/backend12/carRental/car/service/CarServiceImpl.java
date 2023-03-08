@@ -32,7 +32,7 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public Car update(String plate, Car c) throws Exception {
+    public Car update(String plate, Car c) {
         logger.info("Trying to Update a car.");
         logger.debug("carId ["+ c.getCarId() +"]");
 
@@ -48,29 +48,19 @@ public class CarServiceImpl implements CarService{
             if(c.getMileage() != null) {updatedCar.setMileage(c.getMileage());}
             if(c.getAirConditioning() != null) {updatedCar.setAirConditioning(c.getAirConditioning());}
             if(c.getDailyRent() != null) {updatedCar.setDailyRent(c.getDailyRent());}
-            try{
-                return carDAO.save(updatedCar);
-            } catch (Exception e) {
-                String exceptionMessage = "Failed to update the car in service";
-                logger.error(exceptionMessage, e);
-                throw new Exception(exceptionMessage, e);
-            }
+
+            return carDAO.save(updatedCar);
         } else {
             return null;
         }
     }
 
     @Override
-    public Optional<Car> get(String plate) throws Exception{
+    public Optional<Car> get(String plate) {
         logger.info("Trying to Get a car.");
         logger.debug("plate ["+ plate +"]");
-        try {
-            return carDAO.findByPlate(plate);
-        } catch (Exception e) {
-            String exceptionMessage = "Error obtaining the car from CarService.";
-            logger.error(exceptionMessage, e);
-            throw new Exception(exceptionMessage, e);
-        }
+
+        return carDAO.findByPlate(plate);
     }
 
     @Override

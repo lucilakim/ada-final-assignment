@@ -21,30 +21,18 @@ public class CustomerServiceImpl implements CustomerService{
     CustomerDAO customerDAO;
 
     @Override
-    public Customer save(Customer c) throws Exception{
-        logger.info("Trying to insert a customer");
-        try {
-            Customer customer = customerDAO.save(c);
-            return customer;
-        } catch (Exception e){
-            logger.error("An error has occurred trying to enter a user");
-            throw new Exception();
-        }
+    public Customer save(Customer c) {
+        return customerDAO.save(c);
     }
 
     @Override
-    public Customer update(String firstName, String lastName, Date birthDate, Integer idCardNumber, Date idCardExpiration, String phoneNumber) {
+    public Customer update(Customer customer) {
         return null;
     }
 
     @Override
-    public Optional<Customer> get(Integer idCardNumber) throws Exception{
-        try {
-            return customerDAO.findByIdCardNumber(idCardNumber);
-        } catch (Exception e) {
-            logger.error("An error occurred trying to get a customer by idCardNumber: " + idCardNumber);
-            throw new Exception();
-        }
+    public Optional<Customer> get(Integer idCardNumber) {
+        return customerDAO.findByIdCardNumber(idCardNumber);
     }
 
     @Override

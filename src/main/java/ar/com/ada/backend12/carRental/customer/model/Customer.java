@@ -93,4 +93,17 @@ public class Customer implements ApiReturnable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerId=" + customerId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                ", idCardNumber=" + idCardNumber +
+                ", idCardExpiration=" + idCardExpiration +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }
