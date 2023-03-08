@@ -2,6 +2,7 @@ package ar.com.ada.backend12.carRental.customer.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
+import ar.com.ada.backend12.carRental.customer.model.CustomerList;
 import ar.com.ada.backend12.carRental.customer.service.CustomerService;
 import ar.com.ada.backend12.carRental.util.ApiMessage;
 import ar.com.ada.backend12.carRental.util.ApiReturnable;
@@ -86,4 +87,19 @@ public class CustomerController {
         }
     }
 
+    @GetMapping("/customer")
+    private ResponseEntity<ApiReturnable> getAll() {
+        logger.info("Trying to get all the customers");
+        try {
+            CustomerList customerList = customerService.getAll();
+            if(!customerList.getCustomerList().isEmpty()){
+                return new ResponseEntity<ApiReturnable>(customerList, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The list of clients is empty. There is no client yet."), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            logger.error("An error occurred trying to get all the customers.");
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("An error occurred trying to get all the Customers. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

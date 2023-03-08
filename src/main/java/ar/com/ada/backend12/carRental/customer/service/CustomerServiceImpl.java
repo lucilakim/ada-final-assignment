@@ -37,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public CustomerList getAll() {
-        return null;
+        return new CustomerList(customerDAO.findAll());
     }
 
     @Override
