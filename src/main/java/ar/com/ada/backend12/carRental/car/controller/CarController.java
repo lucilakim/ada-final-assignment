@@ -33,18 +33,18 @@ public class CarController {
 
     @PostMapping("/car")
     public ResponseEntity<ApiReturnable> save(
-            @RequestParam(name = "brand") String brand
+            @RequestParam(name = "carPlateId") String carPlateId
+            ,@RequestParam(name = "brand") String brand
             ,@RequestParam(name = "model") String model
             ,@RequestParam(name = "year") Year year
             ,@RequestParam(name = "color") String color
             ,@RequestParam(name = "typeId") Integer typeId
-            ,@RequestParam(name = "plate") String plate
             ,@RequestParam(name = "passengersNumber") Integer passengersNumber
             ,@RequestParam(name = "mileage") Integer mileage
             ,@RequestParam(name = "airConditioning") String airConditioning
             ,@RequestParam(name = "dailyRent") BigDecimal dailyRent
             ){
-        Car c = new Car(brand,model,year,color,typeId,plate,passengersNumber,mileage,airConditioning,dailyRent);
+        Car c = new Car(carPlateId,brand,model,year,color,typeId,passengersNumber,mileage,airConditioning,dailyRent);
 
         logger.info("Trying to insert a Car in the database.");
         logger.debug("name ["+ c.getBrand() +"]");
@@ -60,9 +60,9 @@ public class CarController {
         return new ResponseEntity<ApiReturnable>(c, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/car/{plate}")
+    @PatchMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> update(
-            @PathVariable(name = "plate") String plate
+            @PathVariable(name = "carPlateId") String carPlateId
             ,@RequestParam(name = "brand", required = false) String brand
             ,@RequestParam(name = "model", required = false) String model
             ,@RequestParam(name = "year", required = false) Year year
@@ -73,13 +73,13 @@ public class CarController {
             ,@RequestParam(name = "airConditioning", required = false) String airConditioning
             ,@RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
     ){
-        Car car = new Car(brand,model,year,color,typeId,plate,passengersNumber,mileage,airConditioning,dailyRent);
+        Car car = new Car(carPlateId,brand,model,year,color,typeId,passengersNumber,mileage,airConditioning,dailyRent);
         logger.info("Trying to update a Car in the database.");
         logger.debug("name ["+ car.getBrand() +"]");
         logger.debug("model ["+ car.getModel() +"]");
 
         try{
-            Car updatedCar = carService.update(plate, car);
+            Car updatedCar = carService.update(carPlateId, car);
             if(updatedCar != null) {
                 return new ResponseEntity<ApiReturnable>(updatedCar, HttpStatus.OK);
             } else {
@@ -91,14 +91,14 @@ public class CarController {
         }
     }
 
-    @GetMapping("/car/{plate}")
+    @GetMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> get(
-            @PathVariable(name = "plate") String plate
+            @PathVariable(name = "carPlateId") String carPlateId
     ){
         logger.info("Trying to get a Car in the database.");
-        logger.debug("plate ["+ plate +"]");
+        logger.debug("carPlateId ["+ carPlateId +"]");
         try{
-            Optional<Car> optionalCar = carService.get(plate);
+            Optional<Car> optionalCar = carService.get(carPlateId);
             if(!optionalCar.isEmpty()) {
                 Car car = optionalCar.get();
                 return new ResponseEntity<ApiReturnable>(car, HttpStatus.OK);
@@ -134,15 +134,15 @@ public class CarController {
         }
     }
 
-    @DeleteMapping("/car/{plate}")
+    @DeleteMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> delete(
-            @PathVariable(name = "plate") String plate) {
+            @PathVariable(name = "carPlateId") String carPlateId) {
         logger.info("Trying to delete a Car in the database.");
-        logger.debug("plate ["+ plate +"]");
+        logger.debug("plate ["+ carPlateId +"]");
         try {
-            Boolean deleted = carService.delete(plate);
+            Boolean deleted = carService.delete(carPlateId);
             if(deleted){
-                return new ResponseEntity<ApiReturnable>(new ApiMessage("The car with license plate " + plate + " was successfully removed."),HttpStatus.OK);
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("The car with license plate " + carPlateId + " was successfully removed."),HttpStatus.OK);
             } else {
                 return NOT_FOUND;
             }

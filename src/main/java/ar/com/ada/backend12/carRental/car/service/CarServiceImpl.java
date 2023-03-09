@@ -20,7 +20,7 @@ public class CarServiceImpl implements CarService{
     @Override
     public Car save(Car c) throws Exception{
         logger.info("Trying to insert a car.");
-        logger.debug("carId ["+ c.getCarId() +"]");
+        logger.debug("carId ["+ c.getCarPlateId() +"]");
         try {
             carDAO.save(c);
             return c;
@@ -34,7 +34,7 @@ public class CarServiceImpl implements CarService{
     @Override
     public Car update(String plate, Car c) {
         logger.info("Trying to Update a car.");
-        logger.debug("carId ["+ c.getCarId() +"]");
+        logger.debug("carId ["+ c.getCarPlateId() +"]");
 
         Optional<Car> currentCar = this.get(plate);
         if(currentCar.isPresent()){
@@ -56,11 +56,11 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public Optional<Car> get(String plate) {
+    public Optional<Car> get(String carPlateId) {
         logger.info("Trying to Get a car.");
-        logger.debug("plate ["+ plate +"]");
+        logger.debug("plate ["+ carPlateId +"]");
 
-        return carDAO.findByPlate(plate);
+        return carDAO.findById(carPlateId);
     }
 
     @Override

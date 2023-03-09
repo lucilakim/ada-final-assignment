@@ -10,9 +10,8 @@ import java.time.Year;
 @Table(name = "CAR")
 public class Car implements ApiReturnable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CAR_ID")
-    private Integer carId;
+    @Column(name = "CAR_PLATE_ID")
+    private String carPlateId;
     @Column(name = "BRAND")
     private String brand;
     @Column(name = "MODEL")
@@ -23,8 +22,6 @@ public class Car implements ApiReturnable {
     private String color;
     @Column(name = "TYPE_ID")
     private Integer typeId;
-    @Column(name = "PLATE")
-    private String plate;
     @Column(name = "PASSENGERS_NUMBER")
     private Integer passengersNumber;
     @Column(name = "MILEAGE")
@@ -35,33 +32,27 @@ public class Car implements ApiReturnable {
     private BigDecimal dailyRent;
 
     public Car() {
-        super();
     }
 
-    public Car(String brand, String model, Year year, String color, Integer typeId, String plate, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent) {
+    public Car(String carPlateId, String brand, String model, Year year, String color, Integer typeId, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent) {
+        this.carPlateId = carPlateId;
         this.brand = brand;
         this.model = model;
         this.year = year;
         this.color = color;
         this.typeId = typeId;
-        this.plate = plate;
         this.passengersNumber = passengersNumber;
         this.mileage = mileage;
         this.airConditioning = airConditioning;
-        this.dailyRent = dailyRent;;
+        this.dailyRent = dailyRent;
     }
 
-    public Car(Integer carId, String brand, String model, Year year, String color, Integer typeId, String plate, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent) {
-        this(brand,model,year,color,typeId,plate,passengersNumber,mileage,airConditioning,dailyRent);
-        this.carId = carId;
+    public String getCarPlateId() {
+        return carPlateId;
     }
 
-    public Integer getCarId() {
-        return carId;
-    }
-
-    public void setCarId(Integer carId) {
-        this.carId = carId;
+    public void setCarPlateId(String carPlateId) {
+        this.carPlateId = carPlateId;
     }
 
     public String getBrand() {
@@ -102,14 +93,6 @@ public class Car implements ApiReturnable {
 
     public void setTypeId(Integer typeId) {
         this.typeId = typeId;
-    }
-
-    public String getPlate() {
-        return plate;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate;
     }
 
     public Integer getPassengersNumber() {
