@@ -1,6 +1,8 @@
-package ar.com.ada.backend12.carRental.util;
+package ar.com.ada.backend12.carRental.util.api.message;
 
-public class ApiMessage implements ApiReturnable{
+import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
+
+public class ApiMessage implements ApiReturnable {
     private String message;
 
     public ApiMessage() {

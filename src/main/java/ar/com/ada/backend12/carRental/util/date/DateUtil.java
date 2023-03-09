@@ -1,4 +1,4 @@
-package ar.com.ada.backend12.carRental.util;
+package ar.com.ada.backend12.carRental.util.date;
 
 import java.util.Date;
 

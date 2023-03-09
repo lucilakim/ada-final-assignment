@@ -1,7 +1,7 @@
-package ar.com.ada.backend12.carRental.util;
+package ar.com.ada.backend12.carRental.util.date;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.validation.DateValidator;
+import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
-public class DateUtilImp implements DateUtil{
+public class DateUtilImp implements DateUtil {
     private static final Logger logger = LoggerFactory.getLogger(CarController.class);
     private DateFormat sdf;
 

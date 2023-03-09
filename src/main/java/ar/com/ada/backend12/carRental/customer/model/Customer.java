@@ -1,6 +1,6 @@
 package ar.com.ada.backend12.carRental.customer.model;
 
-import ar.com.ada.backend12.carRental.util.ApiReturnable;
+import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import jakarta.persistence.*;
 
 import java.util.Date;

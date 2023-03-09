@@ -1,6 +1,6 @@
 package ar.com.ada.backend12.carRental.car.model;
 
-import ar.com.ada.backend12.carRental.util.ApiReturnable;
+import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 
 import java.util.List;
 

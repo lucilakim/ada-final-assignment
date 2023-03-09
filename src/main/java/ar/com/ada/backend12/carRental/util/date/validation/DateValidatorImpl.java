@@ -1,7 +1,7 @@
-package ar.com.ada.backend12.carRental.validation;
+package ar.com.ada.backend12.carRental.util.date.validation;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.util.DateUtil;
+import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
