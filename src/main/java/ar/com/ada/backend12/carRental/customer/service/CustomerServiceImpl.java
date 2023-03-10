@@ -20,6 +20,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer save(Customer c) {
+        if (this.get(c.getIdCardNumber()).isPresent()) {
+            return null;
+        }
         return customerDAO.save(c);
     }
 
@@ -42,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Optional<Customer> get(Integer idCardNumber) {
-        return customerDAO.findByIdCardNumber(idCardNumber);
+        return customerDAO.findById(idCardNumber);
     }
 
     @Override

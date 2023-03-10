@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Optional;
 
 public interface CustomerService {
-    public Customer save(Customer customer);
+    public Customer save(Customer customer) ;
     public Customer update(Customer customer);
     public Optional<Customer> get(Integer idCardNumber);
     public CustomerList getAll();

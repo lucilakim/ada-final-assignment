@@ -8,6 +8,7 @@ import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import ar.com.ada.backend12.carRental.util.date.validation.DateValidator;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ public class CustomerController {
 
     @PostMapping("/customer")
     private ResponseEntity<ApiReturnable> save(
-            @RequestParam(name = "firstName") String firstName
+            @RequestParam(name = "idCardNumber") Integer idCardNumber
+            ,@RequestParam(name = "firstName") String firstName
             ,@RequestParam(name = "lastName") String lastName
             ,@RequestParam(name = "birthDate") String stringBirthDate
-            ,@RequestParam(name = "idCardNumber") Integer idCardNumber
             ,@RequestParam(name = "idCardExpiration") String stringIdCardExpiration
             ,@RequestParam(name = "phoneNumber") String phoneNumber
     ){
@@ -56,10 +57,13 @@ public class CustomerController {
             return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. The expected format is yyyy-MM-dd"), HttpStatus.BAD_REQUEST);
         }
 
-        Customer customer = new Customer(firstName, lastName, birthDate, idCardNumber, idCardExpiration, phoneNumber);
+        Customer customer = new Customer(idCardNumber, firstName, lastName, birthDate, idCardExpiration, phoneNumber);
         logger.debug(customer.toString());
         try {
             Customer customerSaved = customerService.save(customer);
+            if (customerSaved == null) {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("Customer already exists"), HttpStatus.CONFLICT);
+            }
             return new ResponseEntity<ApiReturnable>(customerSaved,HttpStatus.OK);
         } catch (Exception e) {
             logger.error("An error has occurred trying to enter a user");
@@ -102,7 +106,7 @@ public class CustomerController {
                 return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. " + stringIdCardExpiration + " The expected format is yyyy-MM-dd in IdCardExpiration"), HttpStatus.BAD_REQUEST);
             }
         }
-        Customer customer = new Customer(firstName, lastName, birthDate, idCardNumber, idCardExpiration, phoneNumber);
+        Customer customer = new Customer(idCardNumber, firstName, lastName, birthDate, idCardExpiration, phoneNumber);
 
         try {
             Customer updatedCustomer = customerService.update(customer);
