@@ -60,9 +60,5 @@ Temporary Items
 .apdisk
 
 .sql
-DateUtil.java
-DateUtilImp.java
-DateValidatorImpl.java
-validation/
 log/
 .gitignore
