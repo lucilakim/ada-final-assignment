@@ -1,10 +1,7 @@
 package ar.com.ada.backend12.carRental.contract.model;
 
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,31 +10,37 @@ import java.util.Date;
 @Table(name = "CONTRACT")
 public class ContractBase implements ApiReturnable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CONTRACT_NUMBER")
     private Integer contractNumber;
+
+    @Column(name = "IS_RENTED")
+    private Boolean isRented;
+
+    @Column(name = "CAR_PLATE_ID")
+    private String carPlateId;
+
+    @Column(name = "CUSTOMER_ID")
+    private Integer idCardNumber;
     @Column(name = "START_DAY")
     private Date startDay;
+
     @Column(name = "DURATION")
     private Integer duration;
-    @Column(name = "DAILY_RENT")
-    private BigDecimal dailyRent;
 
     @Column(name = "AMOUNT_PAID")
     private BigDecimal amountPaid;
 
-    @Column(name = "ARREARS_DAYS")
-    private Integer arrearsDays;
-
     public ContractBase() {
     }
 
-    public ContractBase(Integer contractNumber, Date startDay, Integer duration, BigDecimal dailyRent, BigDecimal amountPaid, Integer arrearsDays) {
-        this.contractNumber = contractNumber;
+    public ContractBase(String carPlateId, Integer idCardNumber, Date startDay, Integer duration, BigDecimal amountPaid) {
+        this.isRented = true;
+        this.carPlateId = carPlateId;
+        this.idCardNumber = idCardNumber;
         this.startDay = startDay;
         this.duration = duration;
-        this.dailyRent = dailyRent;
         this.amountPaid = amountPaid;
-        this.arrearsDays = arrearsDays;
     }
 
     public Integer getContractNumber() {
@@ -46,6 +49,30 @@ public class ContractBase implements ApiReturnable {
 
     public void setContractNumber(Integer contractNumber) {
         this.contractNumber = contractNumber;
+    }
+
+    public Boolean getRented() {
+        return isRented;
+    }
+
+    public void setRented(Boolean rented) {
+        isRented = rented;
+    }
+
+    public String getCarPlateId() {
+        return carPlateId;
+    }
+
+    public void setCarPlateId(String carPlateId) {
+        this.carPlateId = carPlateId;
+    }
+
+    public Integer getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(Integer idCardNumber) {
+        this.idCardNumber = idCardNumber;
     }
 
     public Date getStartDay() {
@@ -64,27 +91,11 @@ public class ContractBase implements ApiReturnable {
         this.duration = duration;
     }
 
-    public BigDecimal getDailyRent() {
-        return dailyRent;
-    }
-
-    public void setDailyRent(BigDecimal dailyRent) {
-        this.dailyRent = dailyRent;
-    }
-
     public BigDecimal getAmountPaid() {
         return amountPaid;
     }
 
     public void setAmountPaid(BigDecimal amountPaid) {
         this.amountPaid = amountPaid;
-    }
-
-    public Integer getArrearsDays() {
-        return arrearsDays;
-    }
-
-    public void setArrearsDays(Integer arrearsDays) {
-        this.arrearsDays = arrearsDays;
     }
 }

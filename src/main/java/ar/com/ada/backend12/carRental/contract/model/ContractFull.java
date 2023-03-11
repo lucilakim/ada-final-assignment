@@ -1,38 +1,47 @@
 package ar.com.ada.backend12.carRental.contract.model;
 
+import ar.com.ada.backend12.carRental.car.model.Car;
+import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class ContractFull implements ApiReturnable {
-    protected Integer contractNumber;
-    protected Date startDay;
-    protected Integer duration;
-    protected BigDecimal dailyRent;
-    protected Integer arrearsDays;
+    private Integer contractNumber;
+    private Boolean isRented;
+    private String carPlateId;
+    private Integer idCardNumber;
+    private Date startDay;
+    private Integer duration;
 
+    private BigDecimal dailyRent;
     private BigDecimal balance;
+
     private BigDecimal amountPaid;
+
     private BigDecimal amountDue;
+    private Integer arrearsDays;
     private BigDecimal arrearsDue;
     private BigDecimal totalBalance;
 
     public ContractFull() {
     }
 
-    public ContractFull(ContractBase contractBase) {
+    public ContractFull(ContractBase contractBase, Car car, Customer customer) {
         this.contractNumber = contractBase.getContractNumber();
+        this.isRented = contractBase.getRented();
+        this.carPlateId = contractBase.getCarPlateId();
+        this.idCardNumber = contractBase.getIdCardNumber();
         this.startDay = contractBase.getStartDay();
         this.duration = contractBase.getDuration();
-        this.dailyRent = contractBase.getDailyRent();
-        this.arrearsDays = contractBase.getArrearsDays();
+        this.dailyRent = car.getDailyRent();
+        this.balance = this.calculateBalance(duration,dailyRent);
         this.amountPaid = contractBase.getAmountPaid();
-
-        this.balance = calculateBalance(duration, dailyRent);
-        this.amountDue = calculateAmountDue(balance, amountPaid);
-        this.arrearsDue = calculateArrearsDue(arrearsDays);
-        this.totalBalance = calculateTotalBalance(amountDue, arrearsDue);
+        this.amountDue = this.calculateAmountDue(balance,amountPaid);
+        this.arrearsDays = 0;
+        this.arrearsDue = BigDecimal.valueOf(0);
+        this.totalBalance = this.calculateTotalBalance(amountDue, arrearsDue);
     }
 
     public Integer getContractNumber() {
@@ -41,6 +50,30 @@ public class ContractFull implements ApiReturnable {
 
     public void setContractNumber(Integer contractNumber) {
         this.contractNumber = contractNumber;
+    }
+
+    public Boolean getRented() {
+        return isRented;
+    }
+
+    public void setRented(Boolean rented) {
+        isRented = rented;
+    }
+
+    public String getCarPlateId() {
+        return carPlateId;
+    }
+
+    public void setCarPlateId(String carPlateId) {
+        this.carPlateId = carPlateId;
+    }
+
+    public Integer getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(Integer idCardNumber) {
+        this.idCardNumber = idCardNumber;
     }
 
     public Date getStartDay() {
@@ -67,14 +100,6 @@ public class ContractFull implements ApiReturnable {
         this.dailyRent = dailyRent;
     }
 
-    public Integer getArrearsDays() {
-        return arrearsDays;
-    }
-
-    public void setArrearsDays(Integer arrearsDays) {
-        this.arrearsDays = arrearsDays;
-    }
-
     public BigDecimal getBalance() {
         return balance;
     }
@@ -97,6 +122,14 @@ public class ContractFull implements ApiReturnable {
 
     public void setAmountDue(BigDecimal amountDue) {
         this.amountDue = amountDue;
+    }
+
+    public Integer getArrearsDays() {
+        return arrearsDays;
+    }
+
+    public void setArrearsDays(Integer arrearsDays) {
+        this.arrearsDays = arrearsDays;
     }
 
     public BigDecimal getArrearsDue() {
@@ -136,18 +169,20 @@ public class ContractFull implements ApiReturnable {
         return amountDue.add(arrearsDue);
     }
 
-
     @Override
     public String toString() {
         return "ContractFull{" +
                 "contractNumber=" + contractNumber +
+                ", isRented=" + isRented +
+                ", carPlateId='" + carPlateId + '\'' +
+                ", idCardNumber=" + idCardNumber +
                 ", startDay=" + startDay +
                 ", duration=" + duration +
                 ", dailyRent=" + dailyRent +
-                ", arrearsDays=" + arrearsDays +
                 ", balance=" + balance +
                 ", amountPaid=" + amountPaid +
                 ", amountDue=" + amountDue +
+                ", arrearsDays=" + arrearsDays +
                 ", arrearsDue=" + arrearsDue +
                 ", totalBalance=" + totalBalance +
                 '}';
