@@ -5,6 +5,7 @@ import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.contract.DAO.ContractDAO;
 import ar.com.ada.backend12.carRental.contract.model.ContractBase;
 import ar.com.ada.backend12.carRental.contract.model.ContractFull;
+import ar.com.ada.backend12.carRental.contract.model.ContractInfo;
 import ar.com.ada.backend12.carRental.contract.model.ContractList;
 import ar.com.ada.backend12.carRental.customer.DAO.CustomerDAO;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
@@ -24,7 +25,7 @@ public class ContractServiceImpl  implements ContractService{
 
 
     @Override
-    public ContractFull save(ContractBase contractBase) {
+    public ContractInfo save(ContractBase contractBase) {
         ContractBase returnedContract = contractDAO.save(contractBase);
 
         if(returnedContract == null) {
@@ -33,22 +34,38 @@ public class ContractServiceImpl  implements ContractService{
             Optional<Car> car = carDAO.findById(returnedContract.getCarPlateId());
             Optional<Customer> customer = customerDAO.findById(returnedContract.getIdCardNumber());
 
-            return new ContractFull(returnedContract,car.get(), customer.get());
+            return new ContractInfo(returnedContract,car.get());
         }
     }
 
     @Override
     public Optional<ContractBase> get(Integer contractNumber) {
-        return Optional.empty();
+        return contractDAO.findById(contractNumber);
     }
 
+    @Override
+    public ContractInfo getInfoContract(ContractBase contractBase) {
+        Optional<Car> car = carDAO.findById(contractBase.getCarPlateId());
+        Optional<Customer> customer = customerDAO.findById(contractBase.getIdCardNumber());
+
+        return new ContractInfo(contractBase,car.get());
+    }
+    @Override
+    public ContractFull getFullContract(ContractBase contractBase) {
+        Optional<Car> car = carDAO.findById(contractBase.getCarPlateId());
+        Optional<Customer> customer = customerDAO.findById(contractBase.getIdCardNumber());
+
+        return new ContractFull(contractBase,car.get(), customer.get());
+    }
     @Override
     public ContractList getAll() {
         return null;
     }
 
     @Override
-    public ContractFull update(ContractBase contractBase) {
+    public ContractInfo update(ContractBase contractBase) {
         return null;
     }
+
+
 }

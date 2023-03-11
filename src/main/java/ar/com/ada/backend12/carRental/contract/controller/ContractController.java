@@ -3,6 +3,7 @@ package ar.com.ada.backend12.carRental.contract.controller;
 import ar.com.ada.backend12.carRental.car.controller.CarController;
 import ar.com.ada.backend12.carRental.contract.model.ContractBase;
 import ar.com.ada.backend12.carRental.contract.model.ContractFull;
+import ar.com.ada.backend12.carRental.contract.model.ContractInfo;
 import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 
 
 @RestController
@@ -55,11 +57,28 @@ public class ContractController {
 
         try {
             ContractBase contractBase = new ContractBase(carPlateId,idCardNumber,startDay,duration,amountPaid);
-            ContractFull contractFull = contractService.save(contractBase);
-            return new ResponseEntity<ApiReturnable>(contractFull, HttpStatus.OK);
+            ContractInfo contractInfo = contractService.save(contractBase);
+            return new ResponseEntity<ApiReturnable>(contractInfo, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the Contract could not be inserted."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/contract/{contractNumber}")
+    private ResponseEntity<ApiReturnable> get(
+            @PathVariable(name = "contractNumber") Integer contractNumber
+    ){
+        try {
+            Optional<ContractBase> contractBase = contractService.get(contractNumber);
+            if (contractBase.isPresent()) {
+                ContractFull ContractFull = contractService.getFullContract(contractBase.get());
+                return new ResponseEntity<ApiReturnable>(ContractFull, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("Contract: " + contractNumber + " not found"), HttpStatus.NOT_FOUND);
+        }
+        } catch (Exception e) {
+            return new ResponseEntity<ApiReturnable>(new ApiMessage("No"), HttpStatus.OK);
         }
     }
 

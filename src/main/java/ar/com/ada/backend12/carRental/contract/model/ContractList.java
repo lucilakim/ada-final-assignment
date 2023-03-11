@@ -5,20 +5,20 @@ import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import java.util.List;
 
 public class ContractList implements ApiReturnable {
-    private List<ContractFull> contractFullList;
+    private List<ContractInfo> contractInfoList;
 
     public ContractList() {
     }
 
-    public ContractList(List<ContractFull> contractFullList) {
-        this.contractFullList = contractFullList;
+    public ContractList(List<ContractInfo> contractInfoList) {
+        this.contractInfoList = contractInfoList;
     }
 
-    public List<ContractFull> getContractFullList() {
-        return contractFullList;
+    public List<ContractInfo> getContractFullList() {
+        return contractInfoList;
     }
 
-    public void setContractFullList(List<ContractFull> contractFullList) {
-        this.contractFullList = contractFullList;
+    public void setContractFullList(List<ContractInfo> contractInfoList) {
+        this.contractInfoList = contractInfoList;
     }
 }
