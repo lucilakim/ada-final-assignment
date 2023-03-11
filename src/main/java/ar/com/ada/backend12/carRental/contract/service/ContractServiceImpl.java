@@ -6,12 +6,14 @@ import ar.com.ada.backend12.carRental.contract.DAO.ContractDAO;
 import ar.com.ada.backend12.carRental.contract.model.ContractBase;
 import ar.com.ada.backend12.carRental.contract.model.ContractFull;
 import ar.com.ada.backend12.carRental.contract.model.ContractInfo;
-import ar.com.ada.backend12.carRental.contract.model.ContractList;
+import ar.com.ada.backend12.carRental.contract.model.ContractInfoList;
 import ar.com.ada.backend12.carRental.customer.DAO.CustomerDAO;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,14 +60,30 @@ public class ContractServiceImpl  implements ContractService{
         return new ContractFull(contractBase,car.get(), customer.get());
     }
     @Override
-    public ContractList getAll() {
-        return null;
+    public ContractInfoList getAll() {
+        List<ContractBase> contractBaseList = contractDAO.findAll();
+        ContractBase contractBase = null;
+        ContractInfo contractInfo = null;
+        Optional<Car> car = null;
+        List<ContractInfo> listContract = new ArrayList<ContractInfo>();
+
+        for (int i = 0; i<contractBaseList.size(); i++) {
+             contractBase = contractBaseList.get(i);
+             car = carDAO.findById(contractBase.getCarPlateId());
+
+             if (car.isEmpty()) {
+                 return  null;
+             } else {
+                 contractInfo = new ContractInfo(contractBase, car.get());
+                listContract.add(contractInfo);
+             }
+        }
+        return new ContractInfoList(listContract);
     }
 
     @Override
     public ContractInfo update(ContractBase contractBase) {
         return null;
     }
-
 
 }

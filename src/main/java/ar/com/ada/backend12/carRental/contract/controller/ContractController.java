@@ -4,6 +4,7 @@ import ar.com.ada.backend12.carRental.car.controller.CarController;
 import ar.com.ada.backend12.carRental.contract.model.ContractBase;
 import ar.com.ada.backend12.carRental.contract.model.ContractFull;
 import ar.com.ada.backend12.carRental.contract.model.ContractInfo;
+import ar.com.ada.backend12.carRental.contract.model.ContractInfoList;
 import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
@@ -79,6 +80,24 @@ public class ContractController {
         }
         } catch (Exception e) {
             return new ResponseEntity<ApiReturnable>(new ApiMessage("No"), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/contract")
+    private ResponseEntity<ApiReturnable> getAll(){
+        try {
+            //throw new RuntimeException();
+            ContractInfoList contractInfoList = contractService.getAll();
+            if(contractInfoList.isEmpty()) {
+                return new ResponseEntity<ApiReturnable>(new ApiMessage("No contract found"), HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<ApiReturnable>(contractInfoList, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            String errorMessage = "An internal error occurred and the contracts could not be obtained. Please try again later";
+            logger.error("An error occurred while trying to obtain all contracts.");
+            return new ResponseEntity<ApiReturnable>(new ApiMessage(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
