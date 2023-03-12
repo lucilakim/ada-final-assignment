@@ -1,10 +1,8 @@
 package ar.com.ada.backend12.carRental.contract.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.contract.model.ContractBase;
-import ar.com.ada.backend12.carRental.contract.model.ContractFull;
-import ar.com.ada.backend12.carRental.contract.model.ContractInfo;
-import ar.com.ada.backend12.carRental.contract.model.ContractInfoList;
+import ar.com.ada.backend12.carRental.contract.dto.PatchContractReqBody;
+import ar.com.ada.backend12.carRental.contract.model.*;
 import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
@@ -14,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +27,6 @@ public class ContractController {
 
     @Autowired
     ContractService contractService;
-
 
     @Autowired
     private DateValidator dateValidator;
@@ -101,4 +99,14 @@ public class ContractController {
         }
     }
 
+    @PatchMapping(value = "/contract/{contractNumber}")
+    private ResponseEntity<ApiReturnable> update (
+            @PathVariable(name = "contractNumber") Integer contractNumber,
+            @RequestBody PatchContractReqBody body
+    ) {
+            BigDecimal twoDecimalsAmountPaid = body.getAmountPaid().setScale(2);
+            contractService.update(contractNumber,twoDecimalsAmountPaid);
+
+            return new ResponseEntity<>(new ApiMessage("Contract: " + contractNumber + " closed. And your ending balance is $0."), HttpStatus.OK);
+    }
 }

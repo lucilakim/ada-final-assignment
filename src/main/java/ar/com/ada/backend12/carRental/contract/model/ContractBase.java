@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "CONTRACT")
@@ -97,5 +98,31 @@ public class ContractBase implements ApiReturnable {
 
     public void setAmountPaid(BigDecimal amountPaid) {
         this.amountPaid = amountPaid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContractBase that = (ContractBase) o;
+        return Objects.equals(contractNumber, that.contractNumber) && Objects.equals(isRented, that.isRented) && Objects.equals(carPlateId, that.carPlateId) && Objects.equals(idCardNumber, that.idCardNumber) && Objects.equals(startDay, that.startDay) && Objects.equals(duration, that.duration) && Objects.equals(amountPaid, that.amountPaid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(contractNumber, isRented, carPlateId, idCardNumber, startDay, duration, amountPaid);
+    }
+
+    @Override
+    public String toString() {
+        return "ContractBase{" +
+                "contractNumber=" + contractNumber +
+                ", isRented=" + isRented +
+                ", carPlateId='" + carPlateId + '\'' +
+                ", idCardNumber=" + idCardNumber +
+                ", startDay=" + startDay +
+                ", duration=" + duration +
+                ", amountPaid=" + amountPaid +
+                '}';
     }
 }

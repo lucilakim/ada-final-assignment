@@ -1,10 +1,8 @@
 package ar.com.ada.backend12.carRental.contract.service;
 
-import ar.com.ada.backend12.carRental.contract.model.ContractBase;
-import ar.com.ada.backend12.carRental.contract.model.ContractFull;
-import ar.com.ada.backend12.carRental.contract.model.ContractInfo;
-import ar.com.ada.backend12.carRental.contract.model.ContractInfoList;
+import ar.com.ada.backend12.carRental.contract.model.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface ContractService {
@@ -13,5 +11,5 @@ public interface ContractService {
     public ContractInfo getInfoContract(ContractBase contractBase);
     public ContractFull getFullContract(ContractBase contractBase);
     public ContractInfoList getAll();
-    public ContractInfo update(ContractBase contractBase);
+    public void update(Integer contractNumber, BigDecimal amountPaid);
 }

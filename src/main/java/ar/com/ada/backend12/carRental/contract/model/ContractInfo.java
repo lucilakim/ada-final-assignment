@@ -3,6 +3,7 @@ package ar.com.ada.backend12.carRental.contract.model;
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -39,8 +40,8 @@ public class ContractInfo implements ApiReturnable {
         this.balance = this.calculateBalance(duration,dailyRent);
         this.amountPaid = contractBase.getAmountPaid();
         this.amountDue = this.calculateAmountDue(balance,amountPaid);
-        this.arrearsDays = 0;
-        this.arrearsDue = BigDecimal.valueOf(0);
+        this.arrearsDays = this.calculateArrearsDays(startDay, duration);
+        this.arrearsDue = this.calculateArrearsDue(arrearsDays);
         this.totalBalance = this.calculateTotalBalance(amountDue, arrearsDue);
     }
 
@@ -156,6 +157,21 @@ public class ContractInfo implements ApiReturnable {
     private BigDecimal calculateAmountDue(BigDecimal balance, BigDecimal amountPaid)
     {
         return balance.subtract(amountPaid);
+    }
+
+    private Integer calculateArrearsDays(Date startDay, Integer duration){
+        long millisToDaysConversionRate = 1000 * 60 * 60 * 24;
+        Long currentDayMillis = new Date().getTime();
+        Long startDayMillis = startDay.getTime();
+
+        long diff = currentDayMillis - startDayMillis;
+        long diffDays = diff / millisToDaysConversionRate;
+
+        if (diffDays > duration) {
+            return (int) diffDays - duration;
+        } else{
+            return 0;
+        }
     }
 
     private BigDecimal calculateArrearsDue(Integer arrearsDays)
