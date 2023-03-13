@@ -27,22 +27,26 @@ public class ContractServiceImpl  implements ContractService{
 
 
     @Override
-    public ContractInfo save(ContractBase contractBase) {
-        ContractBase returnedContract = contractDAO.save(contractBase);
-
-        if(returnedContract == null) {
-            return null;
-        } else {
-            Optional<Car> car = carDAO.findById(returnedContract.getCarPlateId());
-            Optional<Customer> customer = customerDAO.findById(returnedContract.getIdCardNumber());
-
-            return new ContractInfo(returnedContract,car.get());
+    public ContractInfo save(ContractBase contractBase, String carPlateId, Integer idCardNumber) {
+        Optional<Car> car = carDAO.findById(carPlateId);
+        if(car.isEmpty()){
+            throw new NotFoundException(String.format("There is no car registered with the plate id: %s", carPlateId));
         }
+        Optional<Customer> customer = customerDAO.findById(idCardNumber);
+        if(customer.isEmpty()){
+            throw new NotFoundException(String.format("There is no customer registered with the id: %s", idCardNumber));
+        }
+        ContractBase returnedContract = contractDAO.save(contractBase);
+        return new ContractInfo(returnedContract,car.get());
     }
 
     @Override
     public Optional<ContractBase> get(Integer contractNumber) {
-        return contractDAO.findById(contractNumber);
+        Optional<ContractBase> contractBase = contractDAO.findById(contractNumber);
+        if(contractBase.isEmpty()){
+            throw new NotFoundException("Contract: " + contractNumber + " not found");
+        }
+        return  contractBase;
     }
 
     @Override
@@ -52,6 +56,7 @@ public class ContractServiceImpl  implements ContractService{
 
         return new ContractInfo(contractBase,car.get());
     }
+
     @Override
     public ContractFull getFullContract(ContractBase contractBase) {
         Optional<Car> car = carDAO.findById(contractBase.getCarPlateId());
@@ -59,6 +64,7 @@ public class ContractServiceImpl  implements ContractService{
 
         return new ContractFull(contractBase,car.get(), customer.get());
     }
+
     @Override
     public ContractInfoList getAll() {
         List<ContractBase> contractBaseList = contractDAO.findAll();
@@ -71,41 +77,16 @@ public class ContractServiceImpl  implements ContractService{
              contractBase = contractBaseList.get(i);
              car = carDAO.findById(contractBase.getCarPlateId());
 
-             if (car.isEmpty()) {
-                 return  null;
-             } else {
-                 contractInfo = new ContractInfo(contractBase, car.get());
-                listContract.add(contractInfo);
-             }
+             contractInfo = new ContractInfo(contractBase, car.get());
+             listContract.add(contractInfo);
         }
+
+        if(listContract.isEmpty()) {
+            throw new NotFoundException("No contract found");
+        }
+
         return new ContractInfoList(listContract);
     }
-
-//    @Override
-//    public ContractUpdateResult update(Integer contractNumber, BigDecimal amountPaid) {
-//        Optional<ContractBase> contractBase = contractDAO.findById(contractNumber);
-//
-//        if(contractBase.isEmpty()) {
-//            return new ContractUpdateResult(ContractUpdateCode.NOT_FOUND);
-//        }
-//
-//        if(!contractBase.get().getRented()) {
-//            return new ContractUpdateResult(ContractUpdateCode.NOT_RENTED);
-//        }
-//
-//        Optional<Car> car = carDAO.findById(contractBase.get().getCarPlateId());
-//        ContractInfo contractInfo = new ContractInfo(contractBase.get(), car.get());
-//        if (!contractInfo.getTotalBalance().equals(amountPaid)) {
-//            String message = String.format("Contract: %s The amount paid should be equals to the total balance. " +
-//                    "The total balance is: %s, and the amount paid is: %s.",
-//                    contractNumber, contractInfo.getTotalBalance(),amountPaid);
-//            return new ContractUpdateResult(ContractUpdateCode.INCORRECT_AMOUNT, message);
-//        }
-//
-//        contractBase.get().setRented(false);
-//        contractDAO.save(contractBase.get());
-//        return new ContractUpdateResult(ContractUpdateCode.UPDATED);
-//    }
 
     @Override
     public void update(Integer contractNumber, BigDecimal amountPaid) {

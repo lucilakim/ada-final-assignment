@@ -25,7 +25,7 @@ public class CarRentalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    protected ResponseEntity<Object> handleAllException(NotFoundException exception, WebRequest request) {
+    protected ResponseEntity<Object> handleAllException(RuntimeException exception, WebRequest request) {
         logger.error(exception.getMessage(), exception);
         return new ResponseEntity<>(new ApiMessage("There was an unexpected error."), HttpStatus.INTERNAL_SERVER_ERROR);
     }

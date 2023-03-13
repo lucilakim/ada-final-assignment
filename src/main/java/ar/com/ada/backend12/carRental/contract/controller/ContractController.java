@@ -54,49 +54,26 @@ public class ContractController {
             return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. The expected format is yyyy-MM-dd"), HttpStatus.BAD_REQUEST);
         }
 
-        try {
-            ContractBase contractBase = new ContractBase(carPlateId,idCardNumber,startDay,duration,amountPaid);
-            ContractInfo contractInfo = contractService.save(contractBase);
-            return new ResponseEntity<ApiReturnable>(contractInfo, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the Contract could not be inserted."), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        ContractBase contractBase = new ContractBase(carPlateId,idCardNumber,startDay,duration,amountPaid);
+        ContractInfo contractInfo = contractService.save(contractBase,carPlateId, idCardNumber);
+        return new ResponseEntity<ApiReturnable>(contractInfo, HttpStatus.CREATED);
+
     }
 
     @GetMapping("/contract/{contractNumber}")
     private ResponseEntity<ApiReturnable> get(
             @PathVariable(name = "contractNumber") Integer contractNumber
     ){
-        try {
-            Optional<ContractBase> contractBase = contractService.get(contractNumber);
-            if (contractBase.isPresent()) {
-                ContractFull ContractFull = contractService.getFullContract(contractBase.get());
-                return new ResponseEntity<ApiReturnable>(ContractFull, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<ApiReturnable>(new ApiMessage("Contract: " + contractNumber + " not found"), HttpStatus.NOT_FOUND);
-        }
-        } catch (Exception e) {
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("No"), HttpStatus.OK);
-        }
+        Optional<ContractBase> contractBase = contractService.get(contractNumber);
+        ContractFull ContractFull = contractService.getFullContract(contractBase.get());
+        return new ResponseEntity<>(ContractFull, HttpStatus.OK);
+
     }
 
     @GetMapping("/contract")
     private ResponseEntity<ApiReturnable> getAll(){
-        try {
-            //throw new RuntimeException();
-            ContractInfoList contractInfoList = contractService.getAll();
-            if(contractInfoList.isEmpty()) {
-                return new ResponseEntity<ApiReturnable>(new ApiMessage("No contract found"), HttpStatus.NOT_FOUND);
-            } else {
-                return new ResponseEntity<ApiReturnable>(contractInfoList, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            String errorMessage = "An internal error occurred and the contracts could not be obtained. Please try again later";
-            logger.error("An error occurred while trying to obtain all contracts.");
-            return new ResponseEntity<ApiReturnable>(new ApiMessage(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        ContractInfoList contractInfoList = contractService.getAll();
+        return new ResponseEntity<>(contractInfoList, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/contract/{contractNumber}")
@@ -104,9 +81,9 @@ public class ContractController {
             @PathVariable(name = "contractNumber") Integer contractNumber,
             @RequestBody PatchContractReqBody body
     ) {
-            BigDecimal twoDecimalsAmountPaid = body.getAmountPaid().setScale(2);
-            contractService.update(contractNumber,twoDecimalsAmountPaid);
+        BigDecimal twoDecimalsAmountPaid = body.getAmountPaid().setScale(2);
+        contractService.update(contractNumber,twoDecimalsAmountPaid);
 
-            return new ResponseEntity<>(new ApiMessage("Contract: " + contractNumber + " closed. And your ending balance is $0."), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiMessage("Contract: " + contractNumber + " closed. And your ending balance is $0."), HttpStatus.OK);
     }
 }
