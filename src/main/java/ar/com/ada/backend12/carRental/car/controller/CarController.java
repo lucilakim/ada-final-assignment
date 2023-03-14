@@ -68,11 +68,11 @@ public class CarController {
 
     @GetMapping("/car")
     private ResponseEntity<ApiReturnable> getAll(
-            @RequestParam(name = "typeId" , required = false) Integer typeId,
+            @RequestParam(name = "typeId", required = false) Integer typeId,
             @RequestParam(name = "passengersNumber", required = false) Integer passengersNumber,
             @RequestParam(name = "airConditioning", required = false) String airConditioning,
             @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
-             //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
+         //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
         ){
         logger.info("Trying to get all Cars in the database.");
         CarList carList = carService.getAll(typeId, passengersNumber, airConditioning, dailyRent);

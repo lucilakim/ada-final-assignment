@@ -11,5 +11,5 @@ public interface CustomerService {
     public Customer update(Customer customer);
     public Optional<Customer> get(Integer idCardNumber);
     public CustomerList getAll();
-    public boolean delete(Integer idCardNumber);
+    public void delete(Integer idCardNumber);
 }

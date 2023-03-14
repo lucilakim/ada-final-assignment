@@ -1,27 +1,32 @@
 package ar.com.ada.backend12.carRental.customer.service;
 
+import ar.com.ada.backend12.carRental.contract.model.ContractBase;
+import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.customer.DAO.CustomerDAO;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.customer.model.CustomerList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ar.com.ada.backend12.carRental.exception.BadRequestException;
+import ar.com.ada.backend12.carRental.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
-
     @Autowired
     CustomerDAO customerDAO;
+    @Autowired
+    ContractService contractService;
 
     @Override
     public Customer save(Customer c) {
-        if (this.get(c.getIdCardNumber()).isPresent()) {
-            return null;
+        Integer customerIdNumber = c.getIdCardNumber();
+        Optional<Customer> customer = customerDAO.findById(customerIdNumber);
+        if (customer.isPresent()) {
+            throw new BadRequestException(String.format("Customer with the idNumber: %s already exists.", customerIdNumber));
         }
         return customerDAO.save(c);
     }
@@ -29,38 +34,50 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer update(Customer customer) {
         Optional<Customer> currentCustomer = this.get(customer.getIdCardNumber());
-        if(currentCustomer.isPresent()) {
-            Customer updatedCustomer = currentCustomer.get();
-            if(customer.getFirstName() != null) { updatedCustomer.setFirstName(customer.getFirstName());}
-            if(customer.getLastName() != null) { updatedCustomer.setLastName(customer.getLastName());}
-            if(customer.getBirthDate() != null) { updatedCustomer.setBirthDate(customer.getBirthDate());}
-            if(customer.getIdCardExpiration() != null) { updatedCustomer.setIdCardExpiration(customer.getIdCardExpiration());}
-            if(customer.getPhoneNumber() != null) { updatedCustomer.setPhoneNumber(customer.getPhoneNumber());}
-
-            return customerDAO.save(updatedCustomer);
-        } else {
-            return null;
+        if(currentCustomer.isEmpty()) {
+            throw new NotFoundException(String.format("The client with ID number: %s was not found", customer.getIdCardNumber()));
         }
+
+        Customer updatedCustomer = currentCustomer.get();
+        if(customer.getFirstName() != null) { updatedCustomer.setFirstName(customer.getFirstName());}
+        if(customer.getLastName() != null) { updatedCustomer.setLastName(customer.getLastName());}
+        if(customer.getBirthDate() != null) { updatedCustomer.setBirthDate(customer.getBirthDate());}
+        if(customer.getIdCardExpiration() != null) { updatedCustomer.setIdCardExpiration(customer.getIdCardExpiration());}
+        if(customer.getPhoneNumber() != null) { updatedCustomer.setPhoneNumber(customer.getPhoneNumber());}
+
+        return customerDAO.save(updatedCustomer);
     }
 
     @Override
     public Optional<Customer> get(Integer idCardNumber) {
-        return customerDAO.findById(idCardNumber);
+        Optional<Customer> customer = customerDAO.findById(idCardNumber);
+        if(customer.isEmpty()) {
+            throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
+        }
+        return customer;
     }
 
     @Override
     public CustomerList getAll() {
-        return new CustomerList(customerDAO.findAll());
+        List<Customer> customers = customerDAO.findAll();
+        if(customers.isEmpty()) {
+            throw new NotFoundException("The list of clients is empty. There is no client yet.");
+        }
+        return new CustomerList(customers);
     }
 
     @Override
-    public boolean delete(Integer idCardNumber) {
+    public void delete(Integer idCardNumber) {
         Optional<Customer> customer = this.get(idCardNumber);
-        if (customer.isPresent()) {
-            customerDAO.delete(customer.get());
-            return true;
-        } else {
-            return false;
+        if(customer.isEmpty()) {
+            throw new NotFoundException(String.format("The customer with ID number: %s was not found", idCardNumber));
         }
+
+        Optional<ContractBase> contractBase = contractService.getByIdCardNumber(customer.get().getIdCardNumber());
+        if(contractBase.isPresent()) {
+            throw new BadRequestException(String.format("The customer: %s cannot be deleted because it has this contract associated: %s.", idCardNumber, contractBase.get().getContractNumber()));
+        }
+
+        customerDAO.delete(customer.get());
     }
 }

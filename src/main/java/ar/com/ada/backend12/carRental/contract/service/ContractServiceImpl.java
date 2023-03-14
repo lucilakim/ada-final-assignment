@@ -116,4 +116,9 @@ public class ContractServiceImpl  implements ContractService{
     public Optional<ContractBase> getByCarPlateId(String carPlateId) {
         return contractDAO.findByCarPlateId(carPlateId);
     }
+
+    @Override
+    public Optional<ContractBase> getByIdCardNumber(Integer idCardNumber) {
+        return contractDAO.findByIdCardNumber(idCardNumber);
+    }
 }

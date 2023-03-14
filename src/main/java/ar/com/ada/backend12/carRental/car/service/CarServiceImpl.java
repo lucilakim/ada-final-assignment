@@ -10,10 +10,10 @@ import ar.com.ada.backend12.carRental.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,7 +64,12 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent){
-        return new CarList(carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent));
+        List<Car> cars = carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent);
+        if (cars.isEmpty()) {
+            throw new NotFoundException("The list of cars (with the filters) is empty.");
+        }
+
+        return new CarList(cars);
     }
 
     @Override

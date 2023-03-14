@@ -90,4 +90,5 @@ public class PatchCarReqBody {
     public void setDailyRent(BigDecimal dailyRent) {
         this.dailyRent = dailyRent;
     }
+
 }
