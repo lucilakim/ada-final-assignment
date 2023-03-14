@@ -112,4 +112,9 @@ public class ContractServiceImpl  implements ContractService{
         contractBase.get().setRented(false);
         contractDAO.save(contractBase.get());
     }
+
+    @Override
+    public Optional<ContractBase> getByCarPlateId(String carPlateId) {
+        return contractDAO.findByCarPlateId(carPlateId);
+    }
 }

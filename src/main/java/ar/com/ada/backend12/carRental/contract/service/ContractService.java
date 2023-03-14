@@ -12,4 +12,6 @@ public interface ContractService {
     public ContractFull getFullContract(ContractBase contractBase);
     public ContractInfoList getAll();
     public void update(Integer contractNumber, BigDecimal amountPaid);
+
+    public Optional<ContractBase> getByCarPlateId(String carPlateId);
 }

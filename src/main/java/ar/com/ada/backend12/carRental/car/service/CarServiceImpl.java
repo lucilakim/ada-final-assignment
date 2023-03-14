@@ -3,11 +3,14 @@ package ar.com.ada.backend12.carRental.car.service;
 import ar.com.ada.backend12.carRental.car.DAO.CarDAO;
 import ar.com.ada.backend12.carRental.car.model.CarList;
 import ar.com.ada.backend12.carRental.car.model.Car;
+import ar.com.ada.backend12.carRental.contract.model.ContractBase;
+import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.exception.BadRequestException;
 import ar.com.ada.backend12.carRental.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +21,8 @@ public class CarServiceImpl implements CarService{
     private static final Logger logger = LoggerFactory.getLogger(CarServiceImpl.class);
     @Autowired
     CarDAO carDAO;
+    @Autowired
+    ContractService contractService;
 
     @Override
     public Car save(Car c){
@@ -64,10 +69,16 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public void delete(String plate){
-        Optional<Car> optionalCar = this.get(plate);
-        if (optionalCar.isEmpty()) {
+        Optional<Car> car = this.get(plate);
+        if (car.isEmpty()) {
             throw new NotFoundException(String.format("A car with license plate %s was not found.", plate));
         }
-        carDAO.delete(optionalCar.get());
+
+        Optional<ContractBase> contractBase = contractService.getByCarPlateId(car.get().getCarPlateId());
+        if(contractBase.isPresent()) {
+            throw new BadRequestException(String.format("The car: %s cannot be deleted because it has this contract associated: %s.", car.get().getCarPlateId(), contractBase.get().getContractNumber()));
+        }
+
+        carDAO.delete(car.get());
     }
 }
