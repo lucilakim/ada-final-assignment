@@ -3,6 +3,7 @@ package ar.com.ada.backend12.carRental.car.controller;
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.car.model.CarList;
 import ar.com.ada.backend12.carRental.car.service.CarService;
+import ar.com.ada.backend12.carRental.contract.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import org.slf4j.Logger;
@@ -20,135 +21,71 @@ import java.util.Optional;
 @RestController
 public class CarController {
     private static final Logger logger = LoggerFactory.getLogger(CarController.class);
-
-    private static final ResponseEntity<ApiReturnable> NOT_FOUND =
-            new ResponseEntity<ApiReturnable>(new ApiMessage("Car not found."), HttpStatus.NOT_FOUND);
-    private static final ResponseEntity<ApiReturnable> CARS_NOT_FOUND =
-            new ResponseEntity<ApiReturnable>(new ApiMessage("No cars were found with these specifications."), HttpStatus.NOT_FOUND);
-    private static final ResponseEntity<ApiReturnable> ERROR_MESSAGE_500 =
-            new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred. Please try again."), HttpStatus.INTERNAL_SERVER_ERROR);
-
     @Autowired
     private CarService carService;
 
     @PostMapping("/car")
     public ResponseEntity<ApiReturnable> save(
-            @RequestParam(name = "carPlateId") String carPlateId
-            ,@RequestParam(name = "brand") String brand
-            ,@RequestParam(name = "model") String model
-            ,@RequestParam(name = "year") Year year
-            ,@RequestParam(name = "color") String color
-            ,@RequestParam(name = "typeId") Integer typeId
-            ,@RequestParam(name = "passengersNumber") Integer passengersNumber
-            ,@RequestParam(name = "mileage") Integer mileage
-            ,@RequestParam(name = "airConditioning") String airConditioning
-            ,@RequestParam(name = "dailyRent") BigDecimal dailyRent
+            @RequestParam(name = "carPlateId") String carPlateId,
+            @RequestParam(name = "brand") String brand,
+            @RequestParam(name = "model") String model,
+            @RequestParam(name = "year") Year year,
+            @RequestParam(name = "color") String color,
+            @RequestParam(name = "typeId") Integer typeId,
+            @RequestParam(name = "passengersNumber") Integer passengersNumber,
+            @RequestParam(name = "mileage") Integer mileage,
+            @RequestParam(name = "airConditioning") String airConditioning,
+            @RequestParam(name = "dailyRent") BigDecimal dailyRent
             ){
-        Car c = new Car(carPlateId,brand,model,year,color,typeId,passengersNumber,mileage,airConditioning,dailyRent);
-
         logger.info("Trying to insert a Car in the database.");
-        logger.debug("name ["+ c.getBrand() +"]");
-        logger.debug("model ["+ c.getModel() +"]");
-
-        try {
-            Car car = carService.save(c);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("Error registering the car in controller.");
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("Error trying to register the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<ApiReturnable>(c, HttpStatus.CREATED);
+        logger.debug(String.format("carPlateId [ %s ].", carPlateId));
+        Car c = new Car(carPlateId,brand,model,year,color,typeId,passengersNumber,mileage,airConditioning,dailyRent);
+        Car car = carService.save(c);
+        return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
 
     @PatchMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> update(
-            @PathVariable(name = "carPlateId") String carPlateId
-            ,@RequestParam(name = "brand", required = false) String brand
-            ,@RequestParam(name = "model", required = false) String model
-            ,@RequestParam(name = "year", required = false) Year year
-            ,@RequestParam(name = "color", required = false) String color
-            ,@RequestParam(name = "typeId", required = false) Integer typeId
-            ,@RequestParam(name = "passengersNumber", required = false) Integer passengersNumber
-            ,@RequestParam(name = "mileage", required = false) Integer mileage
-            ,@RequestParam(name = "airConditioning", required = false) String airConditioning
-            ,@RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
-    ){
-        Car car = new Car(carPlateId,brand,model,year,color,typeId,passengersNumber,mileage,airConditioning,dailyRent);
+            @PathVariable(name = "carPlateId") String carPlateId,
+            @RequestBody PatchCarReqBody body
+        ){
         logger.info("Trying to update a Car in the database.");
-        logger.debug("name ["+ car.getBrand() +"]");
-        logger.debug("model ["+ car.getModel() +"]");
-
-        try{
-            Car updatedCar = carService.update(carPlateId, car);
-            if(updatedCar != null) {
-                return new ResponseEntity<ApiReturnable>(updatedCar, HttpStatus.OK);
-            } else {
-                return NOT_FOUND;
-            }
-        } catch (Exception e) {
-            logger.error("Failed to update the car in controller");
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred and we were unable to update the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        logger.debug(String.format("carPlateId [ %s ].", carPlateId));
+        Car car = new Car(carPlateId,body.getBrand(),body.getModel(),body.getYear(),body.getColor(),body.getTypeId(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
+        Car updatedCar = carService.update(carPlateId, car);
+        return new ResponseEntity<>(updatedCar, HttpStatus.OK);
     }
 
     @GetMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> get(
             @PathVariable(name = "carPlateId") String carPlateId
-    ){
+        ){
         logger.info("Trying to get a Car in the database.");
-        logger.debug("carPlateId ["+ carPlateId +"]");
-        try{
-            Optional<Car> optionalCar = carService.get(carPlateId);
-            if(!optionalCar.isEmpty()) {
-                Car car = optionalCar.get();
-                return new ResponseEntity<ApiReturnable>(car, HttpStatus.OK);
-            } else {
-                return NOT_FOUND;
-            }
-        } catch (Exception e) {
-            logger.error("Error getting the car from CarController.");
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("Error trying to register the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        logger.debug(String.format("carPlateId [ %s ].", carPlateId));
+        Optional<Car> car = carService.get(carPlateId);
+        return new ResponseEntity<>(car.get(), HttpStatus.OK);
     }
 
     @GetMapping("/car")
     private ResponseEntity<ApiReturnable> getAll(
-              @RequestParam(name = "typeId" , required = false) Integer typeId
-             ,@RequestParam(name = "passengersNumber", required = false) Integer passengersNumber
-             ,@RequestParam(name = "airConditioning", required = false) String airConditioning
-             ,@RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
+            @RequestParam(name = "typeId" , required = false) Integer typeId,
+            @RequestParam(name = "passengersNumber", required = false) Integer passengersNumber,
+            @RequestParam(name = "airConditioning", required = false) String airConditioning,
+            @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
              //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
-    ){
+        ){
         logger.info("Trying to get all Cars in the database.");
-
-        try {
-            CarList carList = carService.getAll(typeId, passengersNumber, airConditioning, dailyRent);
-            if (!carList.getCarList().isEmpty()){
-                return new ResponseEntity<ApiReturnable>(carList, HttpStatus.OK);
-            } else {
-                return CARS_NOT_FOUND;
-            }
-        } catch (Exception e) {
-            logger.error("Error obtaining the cars.");
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("Error getting the cars. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        CarList carList = carService.getAll(typeId, passengersNumber, airConditioning, dailyRent);
+        return new ResponseEntity<>(carList, HttpStatus.OK);
     }
 
     @DeleteMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> delete(
-            @PathVariable(name = "carPlateId") String carPlateId) {
+            @PathVariable(name = "carPlateId") String carPlateId
+        ){
         logger.info("Trying to delete a Car in the database.");
-        logger.debug("plate ["+ carPlateId +"]");
-        try {
-            Boolean deleted = carService.delete(carPlateId);
-            if(deleted){
-                return new ResponseEntity<ApiReturnable>(new ApiMessage("The car with license plate " + carPlateId + " was successfully removed."),HttpStatus.OK);
-            } else {
-                return NOT_FOUND;
-            }
-        } catch (Exception e) {
-            logger.error("Failed to delete the car in controller");
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("An internal error has occurred and we were unable to delete the car. Please try again later."), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        logger.debug(String.format("carPlateId [ %s ].", carPlateId));
+        carService.delete(carPlateId);
+        return new ResponseEntity<>(new ApiMessage(String.format("The car with license plate %s was successfully removed.",carPlateId)),HttpStatus.OK);
     }
 }
