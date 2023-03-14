@@ -81,7 +81,7 @@ public class ContractServiceImpl  implements ContractService{
         }
 
         if(listContract.isEmpty()) {
-            throw new NotFoundException("No contract found");
+            throw new NotFoundException("No contracts found. The list of contracts is empty");
         }
 
         return new ContractInfoList(listContract);
