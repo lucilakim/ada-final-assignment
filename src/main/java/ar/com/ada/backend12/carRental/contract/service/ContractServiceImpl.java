@@ -25,7 +25,6 @@ public class ContractServiceImpl  implements ContractService{
     @Autowired
     CustomerDAO customerDAO;
 
-
     @Override
     public ContractInfo save(ContractBase contractBase, String carPlateId, Integer idCardNumber) {
         Optional<Car> car = carDAO.findById(carPlateId);

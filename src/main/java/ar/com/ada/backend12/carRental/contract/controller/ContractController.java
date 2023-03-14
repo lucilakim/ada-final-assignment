@@ -19,19 +19,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
 
-
 @RestController
 public class ContractController {
     private static final Logger logger = LoggerFactory.getLogger(CarController.class);
-
     @Autowired
     ContractService contractService;
-
     @Autowired
     private DateValidator dateValidator;
     @Autowired
     private DateUtil dateUtil;
-
 
     @PostMapping("/contract")
     private ResponseEntity<ApiReturnable> save(
