@@ -21,13 +21,4 @@ public class ContractInfoList implements ApiReturnable {
     public void setContractInfoList(List<ContractInfo> contractInfoList) {
         this.contractInfoList = contractInfoList;
     }
-
-    public boolean isEmpty(){
-        if (contractInfoList.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }

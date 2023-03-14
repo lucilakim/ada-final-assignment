@@ -36,52 +36,57 @@ public class ContractController {
     @PostMapping("/contract")
     private ResponseEntity<ApiReturnable> save(
             @RequestParam(name = "carPlateId") String carPlateId
-            ,@RequestParam(name = "idCardNumber") Integer idCardNumber
-            ,@RequestParam(name = "startDay") String stringStartDay
-            ,@RequestParam(name = "duration") Integer duration
-            ,@RequestParam(name = "amountPaid") BigDecimal amountPaid
-    ){
+            , @RequestParam(name = "idCardNumber") Integer idCardNumber
+            , @RequestParam(name = "startDay") String stringStartDay
+            , @RequestParam(name = "duration") Integer duration
+            , @RequestParam(name = "amountPaid") BigDecimal amountPaid
+    ) {
         Date startDay = null;
-        if(dateValidator.isValid(stringStartDay)){
+        if (dateValidator.isValid(stringStartDay)) {
             try {
                 startDay = dateUtil.parseDate(stringStartDay);
             } catch (Exception e) {
                 logger.error("Error trying to change data type from string to date", e);
-                return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the Customer could not be inserted."), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ApiMessage("An error has occurred and the Customer could not be inserted."), HttpStatus.BAD_REQUEST);
             }
         } else {
-            return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. The expected format is yyyy-MM-dd"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ApiMessage("The date format is not valid. The expected format is yyyy-MM-dd"), HttpStatus.BAD_REQUEST);
         }
 
-        ContractBase contractBase = new ContractBase(carPlateId,idCardNumber,startDay,duration,amountPaid);
-        ContractInfo contractInfo = contractService.save(contractBase,carPlateId, idCardNumber);
-        return new ResponseEntity<ApiReturnable>(contractInfo, HttpStatus.CREATED);
-
+        ContractBase contractBase = new ContractBase(carPlateId, idCardNumber, startDay, duration, amountPaid);
+        logger.info("Trying to save a Contract in the database.");
+        logger.debug(String.format("contractNumber [ %s ].", contractBase.getContractNumber()));
+        ContractInfo contractInfo = contractService.save(contractBase, carPlateId, idCardNumber);
+        return new ResponseEntity<>(contractInfo, HttpStatus.CREATED);
     }
 
     @GetMapping("/contract/{contractNumber}")
     private ResponseEntity<ApiReturnable> get(
             @PathVariable(name = "contractNumber") Integer contractNumber
-    ){
+    ) {
+        logger.info("Trying to get a Contract from the database.");
+        logger.debug(String.format("contractNumber [ %s ].", contractNumber));
         Optional<ContractBase> contractBase = contractService.get(contractNumber);
         ContractFull ContractFull = contractService.getFullContract(contractBase.get());
         return new ResponseEntity<>(ContractFull, HttpStatus.OK);
-
     }
 
     @GetMapping("/contract")
-    private ResponseEntity<ApiReturnable> getAll(){
+    private ResponseEntity<ApiReturnable> getAll() {
+        logger.info("Trying to get all the Contracts in the database.");
         ContractInfoList contractInfoList = contractService.getAll();
         return new ResponseEntity<>(contractInfoList, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/contract/{contractNumber}")
-    private ResponseEntity<ApiReturnable> update (
+    private ResponseEntity<ApiReturnable> update(
             @PathVariable(name = "contractNumber") Integer contractNumber,
             @RequestBody PatchContractReqBody body
     ) {
+        logger.info("Trying to update a Contract in the database.");
+        logger.debug(String.format("contractNumber [ %s ].", contractNumber));
         BigDecimal twoDecimalsAmountPaid = body.getAmountPaid().setScale(2);
-        contractService.update(contractNumber,twoDecimalsAmountPaid);
+        contractService.update(contractNumber, twoDecimalsAmountPaid);
 
         return new ResponseEntity<>(new ApiMessage("Contract: " + contractNumber + " closed. And your ending balance is $0."), HttpStatus.OK);
     }
