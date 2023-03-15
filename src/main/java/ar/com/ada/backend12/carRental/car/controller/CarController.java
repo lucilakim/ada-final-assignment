@@ -2,6 +2,7 @@ package ar.com.ada.backend12.carRental.car.controller;
 
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.car.model.CarList;
+import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.car.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
@@ -87,5 +88,12 @@ public class CarController {
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         carService.delete(carPlateId);
         return new ResponseEntity<>(new ApiMessage(String.format("The car with license plate %s was successfully removed.",carPlateId)),HttpStatus.OK);
+    }
+
+    @GetMapping("/carBrand")
+    private ResponseEntity<ApiReturnable> getBrands(){
+        logger.info("Trying to get the Car brands from the database.");
+        CarBrands carBrands = carService.getCarBrands();
+        return new ResponseEntity<>(carBrands, HttpStatus.OK);
     }
 }
