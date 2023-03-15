@@ -2,8 +2,9 @@ package ar.com.ada.backend12.carRental.car.controller;
 
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.car.model.CarList;
+import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.service.CarService;
-import ar.com.ada.backend12.carRental.contract.dto.PatchCarReqBody;
+import ar.com.ada.backend12.carRental.car.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class CarController {
             @RequestParam(name = "model") String model,
             @RequestParam(name = "year") Year year,
             @RequestParam(name = "color") String color,
-            @RequestParam(name = "typeId") Integer typeId,
+            @RequestParam(name = "typeId") String carType,
             @RequestParam(name = "passengersNumber") Integer passengersNumber,
             @RequestParam(name = "mileage") Integer mileage,
             @RequestParam(name = "airConditioning") String airConditioning,
@@ -39,7 +40,7 @@ public class CarController {
             ){
         logger.info("Trying to insert a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
-        Car c = new Car(carPlateId,brand,model,year,color,typeId,passengersNumber,mileage,airConditioning,dailyRent);
+        Car c = new Car(carPlateId,brand,model,year,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
         Car car = carService.save(c);
         return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
@@ -51,7 +52,7 @@ public class CarController {
         ){
         logger.info("Trying to update a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
-        Car car = new Car(carPlateId,body.getBrand(),body.getModel(),body.getYear(),body.getColor(),body.getTypeId(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
+        Car car = new Car(carPlateId,body.getBrand(),body.getModel(),body.getYear(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
         Car updatedCar = carService.update(carPlateId, car);
         return new ResponseEntity<>(updatedCar, HttpStatus.OK);
     }
@@ -68,14 +69,14 @@ public class CarController {
 
     @GetMapping("/car")
     private ResponseEntity<ApiReturnable> getAll(
-            @RequestParam(name = "typeId", required = false) Integer typeId,
+            @RequestParam(name = "carType", required = false) String carType,
             @RequestParam(name = "passengersNumber", required = false) Integer passengersNumber,
             @RequestParam(name = "airConditioning", required = false) String airConditioning,
             @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
          //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
         ){
         logger.info("Trying to get all Cars in the database.");
-        CarList carList = carService.getAll(typeId, passengersNumber, airConditioning, dailyRent);
+        CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent);
         return new ResponseEntity<>(carList, HttpStatus.OK);
     }
 
@@ -87,5 +88,12 @@ public class CarController {
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         carService.delete(carPlateId);
         return new ResponseEntity<>(new ApiMessage(String.format("The car with license plate %s was successfully removed.",carPlateId)),HttpStatus.OK);
+    }
+
+    @GetMapping("/carBrand")
+    private ResponseEntity<ApiReturnable> getBrands(){
+        logger.info("Trying to get the Car brands from the database.");
+        CarBrands carBrands = carService.getCarBrands();
+        return new ResponseEntity<>(carBrands, HttpStatus.OK);
     }
 }

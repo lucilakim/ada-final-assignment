@@ -20,8 +20,8 @@ public class Car implements ApiReturnable {
     private Year year;
     @Column(name = "COLOR")
     private String color;
-    @Column(name = "TYPE_ID")
-    private Integer typeId;
+    @Column(name = "CAR_TYPE")
+    private String carType;
     @Column(name = "PASSENGERS_NUMBER")
     private Integer passengersNumber;
     @Column(name = "MILEAGE")
@@ -34,13 +34,13 @@ public class Car implements ApiReturnable {
     public Car() {
     }
 
-    public Car(String carPlateId, String brand, String model, Year year, String color, Integer typeId, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent) {
+    public Car(String carPlateId, String brand, String model, Year year, String color, String carType, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent) {
         this.carPlateId = carPlateId;
         this.brand = brand;
         this.model = model;
         this.year = year;
         this.color = color;
-        this.typeId = typeId;
+        this.carType = carType;
         this.passengersNumber = passengersNumber;
         this.mileage = mileage;
         this.airConditioning = airConditioning;
@@ -87,12 +87,12 @@ public class Car implements ApiReturnable {
         this.color = color;
     }
 
-    public Integer getTypeId() {
-        return typeId;
+    public String getCarType() {
+        return carType;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setCarType(String carType) {
+        this.carType = carType;
     }
 
     public Integer getPassengersNumber() {

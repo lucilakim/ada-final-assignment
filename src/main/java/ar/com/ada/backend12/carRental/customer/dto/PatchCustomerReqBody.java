@@ -1,10 +1,6 @@
-package ar.com.ada.backend12.carRental.contract.dto;
+package ar.com.ada.backend12.carRental.customer.dto;
 
-import jakarta.persistence.Column;
-
-import java.util.Date;
-
-public class PatchCustomerBody {
+public class PatchCustomerReqBody {
     private String firstName;
     private String lastName;
     private String birthDate;
@@ -12,7 +8,7 @@ public class PatchCustomerBody {
 
     private String phoneNumber;
 
-    public PatchCustomerBody() {
+    public PatchCustomerReqBody() {
     }
 
     public String getFirstName() {

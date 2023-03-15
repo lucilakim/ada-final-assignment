@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CarDAOCustom {
     public List<Car> getAll(
-            Integer typeId
+            String carType
             , Integer passengersNumber
             , String airConditioning
             , BigDecimal dailyRent

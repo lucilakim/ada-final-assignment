@@ -1,4 +1,4 @@
-package ar.com.ada.backend12.carRental.contract.dto;
+package ar.com.ada.backend12.carRental.car.dto;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -10,7 +10,7 @@ public class PatchCarReqBody {
     private String model;
     private Year year;
     private String color;
-    private Integer typeId;
+    private String carType;
     private Integer passengersNumber;
     private Integer mileage;
     private String airConditioning;
@@ -51,12 +51,12 @@ public class PatchCarReqBody {
         this.color = color;
     }
 
-    public Integer getTypeId() {
-        return typeId;
+    public String getCarType() {
+        return carType;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setCarType(String carType) {
+        this.carType = carType;
     }
 
     public Integer getPassengersNumber() {

@@ -1,7 +1,7 @@
 package ar.com.ada.backend12.carRental.customer.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.contract.dto.PatchCustomerBody;
+import ar.com.ada.backend12.carRental.customer.dto.PatchCustomerReqBody;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.customer.model.CustomerList;
 import ar.com.ada.backend12.carRental.customer.service.CustomerService;
@@ -9,7 +9,6 @@ import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import ar.com.ada.backend12.carRental.util.date.validation.DateValidator;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +78,7 @@ public class CustomerController {
     @PatchMapping("/customer/{idCardNumber}")
     private ResponseEntity<ApiReturnable> update(
             @PathVariable(name = "idCardNumber") Integer idCardNumber,
-            @RequestBody PatchCustomerBody customerBody
+            @RequestBody PatchCustomerReqBody customerBody
     ){
         logger.info("Trying to update a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
