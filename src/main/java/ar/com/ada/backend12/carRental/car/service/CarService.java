@@ -9,7 +9,8 @@ import java.util.Optional;
 public interface CarService {
     public Car save(Car c);
     public Optional<Car> get(String plate);
-    public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent);
+    public CarList getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent);
     public Car update(String plate, Car c);
+
     public void delete(String plate);
 }

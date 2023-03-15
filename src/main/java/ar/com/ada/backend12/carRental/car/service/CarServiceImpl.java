@@ -44,7 +44,7 @@ public class CarServiceImpl implements CarService{
         if(c.getModel() != null) {updatedCar.setModel(c.getModel());}
         if(c.getYear() != null) {updatedCar.setYear(c.getYear());}
         if(c.getColor() != null) {updatedCar.setColor(c.getColor());}
-        if(c.getTypeId() != null) {updatedCar.setTypeId(c.getTypeId());}
+        if(c.getCarType() != null) {updatedCar.setCarType(c.getCarType());}
         if(c.getPassengersNumber() != null) {updatedCar.setPassengersNumber(c.getPassengersNumber());}
         if(c.getMileage() != null) {updatedCar.setMileage(c.getMileage());}
         if(c.getAirConditioning() != null) {updatedCar.setAirConditioning(c.getAirConditioning());}
@@ -63,8 +63,8 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public CarList getAll(Integer typeId, Integer passengersNumber, String airConditioning, BigDecimal dailyRent){
-        List<Car> cars = carDAO.getAll(typeId, passengersNumber, airConditioning, dailyRent);
+    public CarList getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent){
+        List<Car> cars = carDAO.getAll(carType, passengersNumber, airConditioning, dailyRent);
         if (cars.isEmpty()) {
             throw new NotFoundException("The list of cars (with the filters) is empty.");
         }
