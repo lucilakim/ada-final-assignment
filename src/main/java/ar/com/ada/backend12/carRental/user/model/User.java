@@ -42,4 +42,12 @@ public class User implements ApiReturnable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 }

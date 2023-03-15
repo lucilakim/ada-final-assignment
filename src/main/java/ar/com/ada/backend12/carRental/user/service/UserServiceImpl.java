@@ -2,6 +2,7 @@ package ar.com.ada.backend12.carRental.user.service;
 
 import ar.com.ada.backend12.carRental.exception.BadRequestException;
 import ar.com.ada.backend12.carRental.exception.NotFoundException;
+import ar.com.ada.backend12.carRental.exception.UnauthorizedException;
 import ar.com.ada.backend12.carRental.user.DAO.UserDAO;
 import ar.com.ada.backend12.carRental.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +31,27 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> get(String username) {
-        return userDAO.findById(username);
+        if(username == null) {
+            throw new BadRequestException(String.format("You have to enter a username in the header as a parameter."));
+        }
+
+        Optional<User> user = userDAO.findById(username);
+        if(user.isEmpty()) {
+            throw new BadRequestException(String.format("Username %s is not registered.", username));
+        }
+        return user;
     }
 
     @Override
-    public boolean login(String username, String password){
+    public void login(String username, String password){
         Optional<User> user = this.get(username);
-        if(user.isEmpty()) {
-            throw new NotFoundException(String.format("Username %s is not registered.", username));
-        }
 
         String returnedUserName = user.get().getUsername();
         String returnedPassword = user.get().getPassword();
-        if(returnedUserName.equals(username) && returnedPassword.equals(password)) {
-            return true;
+        Date expirationDate = user.get().getExpirationDate();
+        Date currentDate = new Date();
+        if(!returnedUserName.equals(username) || !returnedPassword.equals(password) || expirationDate.before(currentDate)) {
+            throw new UnauthorizedException("Incorrect username and/or password or expired credentials");
         }
-        return false;
     }
 }

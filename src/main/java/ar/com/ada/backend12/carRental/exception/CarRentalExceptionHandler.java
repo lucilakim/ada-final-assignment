@@ -24,6 +24,12 @@ public class CarRentalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ApiMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    protected ResponseEntity<ApiReturnable> handleUnauthorizedException(UnauthorizedException exception, WebRequest request) {
+        logger.warn(exception.getMessage(), exception);
+        return new ResponseEntity<>(new ApiMessage(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<Object> handleAllException(RuntimeException exception, WebRequest request) {
         logger.error(exception.getMessage(), exception);

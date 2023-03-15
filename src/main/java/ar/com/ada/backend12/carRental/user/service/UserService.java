@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface UserService {
     public User save(String username, String password, Date expirationDate);
     public Optional<User> get(String username);
-    public boolean login(String username, String password);
+    public void login(String username, String password);
 }
