@@ -47,15 +47,14 @@ public class UserServiceImpl implements UserService{
 
         Optional<User> user = this.get(username);
         if(user.isEmpty()) {
-            throw new BadRequestException(String.format("User with username %s is not registered.", username));
+            throw new UnauthorizedException("Incorrect username and/or password or expired credentials");
         }
 
-        String returnedUserName = user.get().getUsername();
         String returnedPassword = user.get().getPassword();
         Date expirationDate = user.get().getExpirationDate();
         Date currentDate = new Date();
 
-        if (!returnedUserName.equals(username) || !returnedPassword.equals(password) || expirationDate.before(currentDate)) {
+        if (!returnedPassword.equals(password) || expirationDate.before(currentDate)) {
             throw new UnauthorizedException("Incorrect username and/or password or expired credentials");
         }
     }
