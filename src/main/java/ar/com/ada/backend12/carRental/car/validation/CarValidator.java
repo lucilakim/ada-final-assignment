@@ -12,7 +12,7 @@ public class CarValidator {
     private static final Set<String> CAR_TYPES = new HashSet<>(Arrays.asList("sedan", "hatchback", "suv", "van"));
     private static final Set<String> AIR_CONDITIONING_VALUES = new HashSet<>(Arrays.asList("yes", "no"));
 
-    public static void validateGetInput(String carPlateId) {
+    public static void validateCarPlateId(String carPlateId) {
         validateCondition(carPlateId.matches(CAR_PLATE_REGEX), "The license plate format is wrong. " +
                 "It should contain 3 contiguous letters and then 3 numbers. Ex ABC123.");
     }

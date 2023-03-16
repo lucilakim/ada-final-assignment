@@ -69,7 +69,7 @@ public class CarController {
     private ResponseEntity<ApiReturnable> get(
             @PathVariable(name = "carPlateId") String carPlateId
         ){
-        CarValidator.validateGetInput(carPlateId);
+        CarValidator.validateCarPlateId(carPlateId);
         logger.info("Trying to get a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Optional<Car> car = carService.get(carPlateId);
@@ -94,6 +94,7 @@ public class CarController {
     private ResponseEntity<ApiReturnable> delete(
             @PathVariable(name = "carPlateId") String carPlateId
         ){
+        CarValidator.validateCarPlateId(carPlateId);
         logger.info("Trying to delete a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         carService.delete(carPlateId);
