@@ -6,7 +6,6 @@ import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.car.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
-import ar.com.ada.backend12.carRental.exception.BadRequestException;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
@@ -43,7 +42,7 @@ public class CarController {
             @RequestParam(name = "airConditioning") String airConditioning,
             @RequestParam(name = "dailyRent") BigDecimal dailyRent
             ){
-        CarValidator.validateSaveInputs(carPlateId,brand,model,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
+        CarValidator.validateAllInputs(carPlateId,brand,model,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
         logger.info("Trying to insert a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Car c = new Car(carPlateId,brand,model,year,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
@@ -56,6 +55,7 @@ public class CarController {
             @PathVariable(name = "carPlateId") String carPlateId,
             @RequestBody PatchCarReqBody body
         ){
+        CarValidator.validateAllInputs(carPlateId,body.getBrand(),body.getModel(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
         logger.info("Trying to update a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Car car = new Car(carPlateId,body.getBrand(),body.getModel(),body.getYear(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
@@ -63,6 +63,12 @@ public class CarController {
         return new ResponseEntity<>(updatedCar, HttpStatus.OK);
     }
 
+    @PatchMapping("/car/")
+    private ResponseEntity<ApiReturnable> update() {
+        logger.info("Trying to update a Car in the database without car plate id.");
+        return new ResponseEntity<>(new ApiMessage("The license plate of the car can not be null or empty. " +
+                "Please try again with the correct path ex /car/abc123"), HttpStatus.BAD_REQUEST);
+    }
     @GetMapping("/car/")
     private ResponseEntity<ApiReturnable> get() {
         logger.info("Trying to get a Car in the database without car plate id.");

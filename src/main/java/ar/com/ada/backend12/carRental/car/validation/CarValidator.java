@@ -13,7 +13,8 @@ public class CarValidator {
     private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("renault", "lexus", "ford", "bmw", "honda", "toyota"));
     private static final Set<String> AIR_CONDITIONING_VALUES = new HashSet<>(Arrays.asList("yes", "no"));
 
-    public static void validateSaveInputs(String carPlateId, String brand, String model, String color, String carType, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent){
+    public static void validateAllInputs(String carPlateId, String brand, String model, String color, String carType,
+                                          Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent){
         validateCarPlateId(carPlateId);
         validateBrand(brand);
         validateModel(model);
@@ -24,6 +25,7 @@ public class CarValidator {
         validateAirConditioningRequired(airConditioning);
         validateDailyRent(dailyRent);
     }
+
     public static void validateGetAllInput(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
         validateCarTypeNotRequired(carType);
         validatePassengerNumber(passengersNumber);
