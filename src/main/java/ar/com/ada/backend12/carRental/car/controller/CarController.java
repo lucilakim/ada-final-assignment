@@ -6,8 +6,10 @@ import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.car.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
+import ar.com.ada.backend12.carRental.exception.BadRequestException;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
+import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class CarController {
     private static final Logger logger = LoggerFactory.getLogger(CarController.class);
     @Autowired
     private CarService carService;
+    @Autowired
+    DateUtil dateUtil;
 
     @PostMapping("/car")
     public ResponseEntity<ApiReturnable> save(
@@ -39,6 +43,7 @@ public class CarController {
             @RequestParam(name = "airConditioning") String airConditioning,
             @RequestParam(name = "dailyRent") BigDecimal dailyRent
             ){
+        CarValidator.validateSaveInputs(carPlateId,brand,model,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
         logger.info("Trying to insert a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Car c = new Car(carPlateId,brand,model,year,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
