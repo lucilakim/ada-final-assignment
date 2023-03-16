@@ -37,12 +37,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void login(String username, String password) {
-        if (Objects.isNull(username) || Objects.isNull(password)) {
-            throw new BadRequestException("You have to enter a username and a password in the header as a parameters.");
+        if (Objects.isNull(username) && Objects.isNull(password)) {
+            throw new BadRequestException("Missing username and password in the header. Please fill them and try again.");
+        } else if (Objects.isNull(username)){
+            throw new BadRequestException("Missing username in the header. Please fill it and try again..");
+        } else if (Objects.isNull(password)){
+        throw new BadRequestException("Missing password in the header. Please fill it and try again..");
         }
+
         Optional<User> user = this.get(username);
         if(user.isEmpty()) {
-            throw new BadRequestException(String.format("Username %s is not registered.", username));
+            throw new BadRequestException(String.format("User with username %s is not registered.", username));
         }
 
         String returnedUserName = user.get().getUsername();

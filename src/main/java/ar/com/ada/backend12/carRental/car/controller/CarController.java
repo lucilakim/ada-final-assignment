@@ -32,7 +32,7 @@ public class CarController {
             @RequestParam(name = "model") String model,
             @RequestParam(name = "year") Year year,
             @RequestParam(name = "color") String color,
-            @RequestParam(name = "typeId") String carType,
+            @RequestParam(name = "carType") String carType,
             @RequestParam(name = "passengersNumber") Integer passengersNumber,
             @RequestParam(name = "mileage") Integer mileage,
             @RequestParam(name = "airConditioning") String airConditioning,
