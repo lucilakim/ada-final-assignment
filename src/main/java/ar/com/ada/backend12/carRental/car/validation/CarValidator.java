@@ -54,7 +54,12 @@ public class CarValidator {
         validateCondition(carPlateId.matches(CAR_PLATE_REGEX), "The license plate format is wrong. " +
                 "It should contain 3 contiguous letters and then 3 numbers. Ex ABC123.");
     }
-
+    public static boolean carPlateIdIsValid(String carPlateId) {
+       if (!carPlateId.matches(CAR_PLATE_REGEX)) {
+           return false;
+       }
+       return true;
+    }
     private static void validateModel(String model){
         validateModelNotRequired(model);
         validateCondition(model != null, "The brand field cannot be empty or null.");

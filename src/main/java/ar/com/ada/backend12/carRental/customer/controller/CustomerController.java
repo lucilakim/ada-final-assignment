@@ -6,7 +6,7 @@ import ar.com.ada.backend12.carRental.customer.dto.PatchCustomerReqBody;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.customer.model.CustomerList;
 import ar.com.ada.backend12.carRental.customer.service.CustomerService;
-import ar.com.ada.backend12.carRental.customer.validation.CustomerValidation;
+import ar.com.ada.backend12.carRental.customer.validation.CustomerValidator;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
@@ -44,7 +44,7 @@ public class CustomerController {
             , @RequestParam(name = "idCardExpiration") String stringIdCardExpiration
             , @RequestParam(name = "phoneNumber") String phoneNumber
     ) {
-        CustomerValidation.validateSaveInputs(idCardNumber, firstName, lastName, stringBirthDate, stringIdCardExpiration, phoneNumber);
+        CustomerValidator.validateSaveInputs(idCardNumber, firstName, lastName, stringBirthDate, stringIdCardExpiration, phoneNumber);
         Date birthDate = customerUtil.parseDate(stringBirthDate);
         Date idCardExpiration = customerUtil.parseDate(stringIdCardExpiration);
 
@@ -60,7 +60,7 @@ public class CustomerController {
             @PathVariable(name = "idCardNumber") Integer idCardNumber,
             @RequestBody PatchCustomerReqBody customerBody
     ) {
-        CustomerValidation.validateUpdateInputs(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(),
+        CustomerValidator.validateUpdateInputs(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(),
                 customerBody.getBirthDate(), customerBody.getIdCardExpiration(), customerBody.getPhoneNumber());
         Date birthDate = null;
         if (customerBody.getBirthDate() != null) birthDate = customerUtil.parseDate(customerBody.getBirthDate());
@@ -78,7 +78,7 @@ public class CustomerController {
     private ResponseEntity<ApiReturnable> get(
             @PathVariable(name = "idCardNumber") Integer idCardNumber
     ) {
-        CustomerValidation.validateIdCardNumber(idCardNumber);
+        CustomerValidator.validateIdCardNumber(idCardNumber);
         logger.info("Trying to get a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
         Optional<Customer> customer = customerService.get(idCardNumber);
@@ -96,7 +96,7 @@ public class CustomerController {
     private ResponseEntity<ApiReturnable> delete(
             @PathVariable(name = "idCardNumber") Integer idCardNumber
     ) {
-        CustomerValidation.validateIdCardNumber(idCardNumber);
+        CustomerValidator.validateIdCardNumber(idCardNumber);
         logger.info("Trying to delete a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
         customerService.delete(idCardNumber);

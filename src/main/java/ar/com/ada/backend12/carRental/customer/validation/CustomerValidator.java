@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-public class CustomerValidation {
-    static Logger logger = LoggerFactory.getLogger(CustomerValidation.class);
+public class CustomerValidator {
+    static Logger logger = LoggerFactory.getLogger(CustomerValidator.class);
     static DateUtil DATE_UTIL = new DateUtilImp();
     static DateValidator DATE_VALIDATOR = new DateValidatorImpl(DATE_UTIL);
     static CustomerUtil CUSTOMER_UTIL = new CustomerUtilImpl(DATE_VALIDATOR, DATE_UTIL);

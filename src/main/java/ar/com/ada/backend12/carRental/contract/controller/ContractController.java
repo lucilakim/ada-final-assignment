@@ -1,9 +1,13 @@
 package ar.com.ada.backend12.carRental.contract.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
+import ar.com.ada.backend12.carRental.car.service.CarService;
+import ar.com.ada.backend12.carRental.car.validation.CarValidator;
 import ar.com.ada.backend12.carRental.contract.dto.PatchContractReqBody;
 import ar.com.ada.backend12.carRental.contract.model.*;
 import ar.com.ada.backend12.carRental.contract.service.ContractService;
+import ar.com.ada.backend12.carRental.contract.validation.ContractValidator;
+import ar.com.ada.backend12.carRental.customer.validation.CustomerValidator;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
@@ -25,6 +29,8 @@ public class ContractController {
     @Autowired
     ContractService contractService;
     @Autowired
+    CarService carService;
+    @Autowired
     private DateValidator dateValidator;
     @Autowired
     private DateUtil dateUtil;
@@ -37,6 +43,11 @@ public class ContractController {
             , @RequestParam(name = "duration") Integer duration
             , @RequestParam(name = "amountPaid") BigDecimal amountPaid
     ) {
+        CarValidator.validateCarPlateId(carPlateId);
+        BigDecimal carDailyRent = null;
+        if (CarValidator.carPlateIdIsValid(carPlateId)) carDailyRent = carService.get(carPlateId).get().getDailyRent();
+        ContractValidator.validateSaveInputs(carPlateId, idCardNumber, stringStartDay, duration, amountPaid, carDailyRent);
+
         Date startDay = null;
         if (dateValidator.isValid(stringStartDay)) {
             try {
