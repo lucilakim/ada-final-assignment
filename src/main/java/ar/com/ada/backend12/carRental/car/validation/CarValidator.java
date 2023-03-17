@@ -51,8 +51,13 @@ public class CarValidator {
     }
 
     public static void validateCarPlateId(String carPlateId) {
-        validateCondition(carPlateId.matches(CAR_PLATE_REGEX), "The license plate format is wrong. " +
-                "It should contain 3 contiguous letters and then 3 numbers. Ex ABC123.");
+        if (carPlateId != null) {
+            validateCondition(!carPlateId.equals(""), "The model field cannot be empty or null.");
+            validateCondition(carPlateId.matches(CAR_PLATE_REGEX), "The license plate format is wrong. " +
+                    "It should contain 3 contiguous letters and then 3 numbers. Ex ABC123.");
+        } else {
+            throw new BadRequestException("The airConditioning field cannot be empty or null.");
+        }
     }
     public static boolean carPlateIdIsValid(String carPlateId) {
        if (!carPlateId.matches(CAR_PLATE_REGEX)) {
@@ -67,7 +72,7 @@ public class CarValidator {
     private static void validateModelNotRequired(String model){
         if (model != null) {
             model = model.trim().toLowerCase();
-            validateCondition(model == null || !model.equals(""), "The model field cannot be empty or null.");
+            validateCondition(!model.equals(""), "The model field cannot be empty or null.");
         }
     }
 
