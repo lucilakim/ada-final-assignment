@@ -51,7 +51,7 @@ public class CustomerController {
         logger.info("Trying to insert a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
         Customer customer = new Customer(idCardNumber, firstName, lastName, birthDate, idCardExpiration, phoneNumber);
-        Customer customerSaved = customerService.save(customer);
+        CustomerDto customerSaved = customerService.save(customer);
         return new ResponseEntity<ApiReturnable>(customerSaved, HttpStatus.OK);
     }
 
@@ -64,13 +64,14 @@ public class CustomerController {
                 customerBody.getBirthDate(), customerBody.getIdCardExpiration(), customerBody.getPhoneNumber());
         Date birthDate = null;
         if (customerBody.getBirthDate() != null) birthDate = apiUtil.parseDate(customerBody.getBirthDate());
-        Date idCardExpiration = apiUtil.parseDate(customerBody.getIdCardExpiration());
+        Date idCardExpiration = null;
+        if (customerBody.getIdCardExpiration() != null) idCardExpiration = apiUtil.parseDate(customerBody.getIdCardExpiration());
 
         logger.info("Trying to update a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
         Customer customer = new Customer(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(), birthDate, idCardExpiration, customerBody.getPhoneNumber());
-        Customer updatedCustomer = customerService.update(customer);
-        return new ResponseEntity<ApiReturnable>(updatedCustomer, HttpStatus.OK);
+        CustomerDto customerDto = customerService.update(customer);
+        return new ResponseEntity<ApiReturnable>(customerDto, HttpStatus.OK);
     }
 
     @GetMapping("/customer/{idCardNumber}")

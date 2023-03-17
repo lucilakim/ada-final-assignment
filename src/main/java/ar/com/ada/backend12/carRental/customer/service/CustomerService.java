@@ -7,8 +7,8 @@ import ar.com.ada.backend12.carRental.customer.dto.CustomersDto;
 import java.util.Optional;
 
 public interface CustomerService {
-    public Customer save(Customer customer) ;
-    public Customer update(Customer customer);
+    public CustomerDto save(Customer customer) ;
+    public CustomerDto update(Customer customer);
     public Optional<Customer> get(Integer idCardNumber);
     public CustomerDto getReturnableCustomer(Integer idCardNumber);
     public CustomersDto getAll();

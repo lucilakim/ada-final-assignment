@@ -31,17 +31,20 @@ public class CustomerServiceImpl implements CustomerService {
     ApiUtil apiUtil;
 
     @Override
-    public Customer save(Customer c) {
+    public CustomerDto save(Customer c) {
         Integer customerIdNumber = c.getIdCardNumber();
         Optional<Customer> customer = customerDAO.findById(customerIdNumber);
         if (customer.isPresent()) {
             throw new BadRequestException(String.format("Customer with the idNumber: %s already exists.", customerIdNumber));
         }
-        return customerDAO.save(c);
+        Customer returnedCustomer = customerDAO.save(c);
+        CustomerDto customerDto = apiUtil.getCustomerDto(returnedCustomer.getIdCardNumber(), returnedCustomer.getFirstName(),
+                returnedCustomer.getLastName(), returnedCustomer.getPhoneNumber(), returnedCustomer.getBirthDate(), returnedCustomer.getIdCardExpiration());
+        return customerDto;
     }
 
     @Override
-    public Customer update(Customer customer) {
+    public CustomerDto update(Customer customer) {
         Optional<Customer> currentCustomer = this.get(customer.getIdCardNumber());
         if(currentCustomer.isEmpty()) {
             throw new NotFoundException(String.format("The client with ID number: %s was not found", customer.getIdCardNumber()));
@@ -54,7 +57,10 @@ public class CustomerServiceImpl implements CustomerService {
         if(customer.getIdCardExpiration() != null) { updatedCustomer.setIdCardExpiration(customer.getIdCardExpiration());}
         if(customer.getPhoneNumber() != null) { updatedCustomer.setPhoneNumber(customer.getPhoneNumber());}
 
-        return customerDAO.save(updatedCustomer);
+        Customer returnedCustomer = customerDAO.save(updatedCustomer);
+        CustomerDto customerDto = apiUtil.getCustomerDto(returnedCustomer.getIdCardNumber(), returnedCustomer.getFirstName(),
+                returnedCustomer.getLastName(), returnedCustomer.getPhoneNumber(), returnedCustomer.getBirthDate(), returnedCustomer.getIdCardExpiration());
+        return customerDto;
     }
 
     @Override
