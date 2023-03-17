@@ -105,13 +105,20 @@ public class CustomerController {
         return new ResponseEntity<ApiReturnable>(customerList, HttpStatus.OK);
     }
 
+    @DeleteMapping("/customer/")
+    private ResponseEntity<ApiReturnable> delete() {
+        logger.info("Trying to delete a Customer in the database without customer id card number.");
+        return new ResponseEntity<>(new ApiMessage("The id card number of the customer can not be null or empty." +
+                "Please try again with the correct path ex /car/123456789"), HttpStatus.BAD_REQUEST);
+    }
+
     @DeleteMapping("/customer/{idCardNumber}")
     private ResponseEntity<ApiReturnable> delete(
             @PathVariable(name = "idCardNumber") Integer idCardNumber
     ) {
+        CustomerValidation.validateIdCardNumber(idCardNumber);
         logger.info("Trying to delete a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
-
         customerService.delete(idCardNumber);
         return new ResponseEntity<ApiReturnable>(new ApiMessage("The client with identity card Number: " + idCardNumber + " was successfully deleted."), HttpStatus.OK);
     }
