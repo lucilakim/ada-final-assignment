@@ -23,6 +23,11 @@ public class CustomerUtilImpl implements CustomerUtil {
     public CustomerUtilImpl() {
     }
 
+    public CustomerUtilImpl(DateValidator dateValidator, DateUtil dateUtil) {
+        this.dateValidator = dateValidator;
+        this.dateUtil = dateUtil;
+    }
+
     @Override
     public Date parseDate(String stringDate) {
         try {

@@ -14,7 +14,7 @@ public class DateValidatorImpl implements DateValidator {
     private static final Logger logger = LoggerFactory.getLogger(CarController.class);
     private String dateFormat;
     private DateUtil dateUtil;
-
+    private static final String DATE_REGEX = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
 
     // Constructors
     @Autowired
@@ -27,8 +27,10 @@ public class DateValidatorImpl implements DateValidator {
     @Override
     public boolean isValid(String dateString) {
         try {
-            Date date = dateUtil.parseDate(this.dateFormat, dateString);
-            return true;
+            if (dateString.matches(DATE_REGEX)) {
+                Date date = dateUtil.parseDate(this.dateFormat, dateString);
+                return true;
+            }
         } catch (Exception e) {
             System.out.print("The format of the date entered is incorrect. Enter a valid format [" + dateFormat + "]: ");
         }

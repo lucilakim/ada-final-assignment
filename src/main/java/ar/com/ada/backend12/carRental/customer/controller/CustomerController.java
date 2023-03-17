@@ -44,7 +44,7 @@ public class CustomerController {
             ,@RequestParam(name = "idCardExpiration") String stringIdCardExpiration
             ,@RequestParam(name = "phoneNumber") String phoneNumber
     ){
-        CustomerValidation.validateAllInputs(idCardNumber, firstName, lastName, stringBirthDate, stringIdCardExpiration, phoneNumber);
+        CustomerValidation.validateSaveInputs(idCardNumber, firstName, lastName, stringBirthDate, stringIdCardExpiration, phoneNumber);
         Date birthDate = customerUtil.parseDate(stringBirthDate);
         Date idCardExpiration = customerUtil.parseDate(stringIdCardExpiration);
 
@@ -60,17 +60,24 @@ public class CustomerController {
             @PathVariable(name = "idCardNumber") Integer idCardNumber,
             @RequestBody PatchCustomerReqBody customerBody
     ){
-        CustomerValidation.validateAllInputs(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(),
+        CustomerValidation.validateUpdateInputs(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(),
                 customerBody.getBirthDate(), customerBody.getIdCardExpiration(), customerBody.getPhoneNumber());
-        Date birthDate = customerUtil.parseDate(customerBody.getBirthDate());
-        Date idCardExpiration = customerUtil.parseDate(customerBody.getIdCardExpiration());
+        Date birthDate = null;
+        if (customerBody.getBirthDate() != null) birthDate = customerUtil.parseDate(customerBody.getBirthDate());
+        Date idCardExpiration = null;
+        if (idCardExpiration != null) idCardExpiration = customerUtil.parseDate(customerBody.getIdCardExpiration());
 
         logger.info("Trying to update a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
         Customer customer = new Customer(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(), birthDate, idCardExpiration, customerBody.getPhoneNumber());
         Customer updatedCustomer = customerService.update(customer);
         return new ResponseEntity<ApiReturnable>(updatedCustomer, HttpStatus.OK);
-
+    }
+    @PatchMapping("/customer/")
+    private ResponseEntity<ApiReturnable> update() {
+        logger.info("Trying to update a Customer in the database without id card number.");
+        return new ResponseEntity<>(new ApiMessage("The id card number of the Customer can not be null or empty. " +
+                "Please try again with the correct path ex /customer/123456789."), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/customer/{idCardNumber}")
@@ -82,12 +89,6 @@ public class CustomerController {
 
         Optional<Customer> customer = customerService.get(idCardNumber);
         return new ResponseEntity<ApiReturnable>(customer.get(), HttpStatus.OK);
-    }
-    @PatchMapping("/customer/")
-    private ResponseEntity<ApiReturnable> update() {
-        logger.info("Trying to update a Customer in the database without id card number.");
-        return new ResponseEntity<>(new ApiMessage("The id card number of the Customer can not be null or empty. " +
-                "Please try again with the correct path ex /customer/123456789."), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/customer")
