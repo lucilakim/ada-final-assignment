@@ -66,12 +66,8 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarList getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent, String onlyAvailable){
-        List<Car> cars = carDAO.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable.toUpperCase());
-        System.out.println(onlyAvailable);
-        if (cars.isEmpty()) {
-            throw new NotFoundException("The list of cars (with the filters) is empty.");
-        }
-
+        List<Car> cars = carDAO.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
+        if (cars.isEmpty()) throw new NotFoundException("The list of cars (with the filters) is empty.");
         return new CarList(cars);
     }
 

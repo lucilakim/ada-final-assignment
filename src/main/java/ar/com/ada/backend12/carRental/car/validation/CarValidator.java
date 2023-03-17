@@ -10,9 +10,9 @@ import java.util.Set;
 public class CarValidator {
     private static final String CAR_PLATE_REGEX = "^[A-Za-z]{3}[0-9]{3}$";
     private static final Set<String> CAR_TYPES = new HashSet<>(Arrays.asList("sedan", "hatchback", "suv", "van"));
-    private static final Set<String> AVAILABLE = new HashSet<>(Arrays.asList("si", "no"));
+    private static final Set<String> AVAILABLE = new HashSet<>(Arrays.asList("yes", "no"));
     private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("Audi", "BMW", "renault", "lexus", "ford", "bmw", "honda", "toyota"));
-    private static final Set<String> AIR_CONDITIONING_VALUES = new HashSet<>(Arrays.asList("yes", "no"));
+
 
     public static void validateSaveInputs(String carPlateId, String brand, String model, String color, String carType,
                                           Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent){
@@ -48,7 +48,6 @@ public class CarValidator {
 
     private static void validateOnlyAvailable(String onlyAvailable) {
         if(onlyAvailable != null) {
-            onlyAvailable.trim().toLowerCase();
             validateCondition(AVAILABLE.contains(onlyAvailable),
                     "The value of the parameter onlyAvailable is not valid. The options are Yes or No.");
         }
@@ -140,7 +139,7 @@ public class CarValidator {
         if (airConditioning != null) {
             airConditioning = airConditioning.trim().toLowerCase();
             validateCondition(!airConditioning.equals(""), "The airConditioning field cannot be empty or null.");
-            validateCondition(AIR_CONDITIONING_VALUES.contains(airConditioning), "The air conditioning value is not valid. The options are yes or no.");
+            validateCondition(AVAILABLE.contains(airConditioning), "The air conditioning value is not valid. The options are yes or no.");
         }
     }
 

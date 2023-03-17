@@ -5,20 +5,20 @@ import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import java.util.List;
 
 public class CarList implements ApiReturnable {
-    private List<Car> carList;
+    private List<Car> cars;
 
     public CarList() {
     }
 
-    public CarList(List<Car> carList) {
-        this.carList = carList;
+    public CarList(List<Car> cars) {
+        this.cars = cars;
     }
 
-    public List<Car> getCarList() {
-        return carList;
+    public List<Car> getCars() {
+        return cars;
     }
 
-    public void setCarList(List<Car> carList) {
-        this.carList = carList;
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
     }
 }

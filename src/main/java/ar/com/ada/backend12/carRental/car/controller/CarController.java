@@ -2,7 +2,6 @@ package ar.com.ada.backend12.carRental.car.controller;
 
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.car.model.CarList;
-import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.car.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
@@ -82,6 +81,7 @@ public class CarController {
             @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent,
             @RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
     ) {
+        if (onlyAvailable != null) onlyAvailable = onlyAvailable.trim().toLowerCase();
         CarValidator.validateGetAllInput(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
         logger.info("Trying to get all Cars in the database.");
         CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);

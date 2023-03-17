@@ -37,7 +37,7 @@ public class CarDAOCustomImpl implements CarDAOCustom{
             conditions.add("c.dailyRent = :dailyRent");
         }
         if(onlyAvailable != null) {
-            if(onlyAvailable.equals("SI")) {
+            if(onlyAvailable.equals("yes")) {
                 conditions.add("c.associatedContract <> null");
             } else {
                 conditions.add("c.associatedContract = null");
