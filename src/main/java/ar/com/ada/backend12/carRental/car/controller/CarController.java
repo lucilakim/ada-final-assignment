@@ -81,7 +81,7 @@ public class CarController {
             @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent,
             @RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
     ) {
-        if (onlyAvailable != null) onlyAvailable = onlyAvailable.trim().toLowerCase();
+        onlyAvailable = (onlyAvailable != null) ?  onlyAvailable.trim().toLowerCase() : "yes";
         CarValidator.validateGetAllInput(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
         logger.info("Trying to get all Cars in the database.");
         CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
