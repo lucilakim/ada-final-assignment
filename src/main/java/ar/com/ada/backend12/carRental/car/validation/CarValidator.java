@@ -10,7 +10,7 @@ import java.util.Set;
 public class CarValidator {
     private static final String CAR_PLATE_REGEX = "^[A-Za-z]{3}[0-9]{3}$";
     private static final Set<String> CAR_TYPES = new HashSet<>(Arrays.asList("sedan", "hatchback", "suv", "van"));
-    private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("renault", "lexus", "ford", "bmw", "honda", "toyota"));
+    private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("Audi", "BMW", "renault", "lexus", "ford", "bmw", "honda", "toyota"));
     private static final Set<String> AIR_CONDITIONING_VALUES = new HashSet<>(Arrays.asList("yes", "no"));
 
     public static void validateSaveInputs(String carPlateId, String brand, String model, String color, String carType,
@@ -107,7 +107,7 @@ public class CarValidator {
         if (brand != null) {
             brand = brand.trim().toLowerCase();
             validateCondition(brand == null || !brand.equals(""), "The brand field cannot be empty or null.");
-            validateCondition(CAR_BRANDS.contains(brand), "The brand of the car is not available. The available ones are Renault, Lexus, Ford, BMW, Honda or Toyota.");
+            validateCondition(CAR_BRANDS.contains(brand), "The brand of the car is not available. The available ones are Audi, BMW, Renault, Lexus, Ford, BMW, Honda or Toyota.");
         }
     }
 

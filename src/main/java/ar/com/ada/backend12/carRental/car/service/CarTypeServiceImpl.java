@@ -1,7 +1,7 @@
-package ar.com.ada.backend12.carRental.carType.service;
+package ar.com.ada.backend12.carRental.car.service;
 
-import ar.com.ada.backend12.carRental.carType.DAO.CarTypeDAO;
-import ar.com.ada.backend12.carRental.carType.model.CarTypeList;
+import ar.com.ada.backend12.carRental.car.DAO.CarTypeDAO;
+import ar.com.ada.backend12.carRental.car.model.CarTypeList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

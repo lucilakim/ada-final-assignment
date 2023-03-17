@@ -1,6 +1,6 @@
-package ar.com.ada.backend12.carRental.carType.service;
+package ar.com.ada.backend12.carRental.car.service;
 
-import ar.com.ada.backend12.carRental.carType.model.CarTypeList;
+import ar.com.ada.backend12.carRental.car.model.CarTypeList;
 
 public interface CarTypeService {
     public CarTypeList getAll();
