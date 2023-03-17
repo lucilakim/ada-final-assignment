@@ -11,7 +11,7 @@ public class CarValidator {
     private static final String CAR_PLATE_REGEX = "^[A-Za-z]{3}[0-9]{3}$";
     private static final Set<String> CAR_TYPES = new HashSet<>(Arrays.asList("sedan", "hatchback", "suv", "van"));
     private static final Set<String> AVAILABLE = new HashSet<>(Arrays.asList("yes", "no"));
-    private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("Audi", "BMW", "renault", "lexus", "ford", "bmw", "honda", "toyota"));
+    private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("audi", "bmw", "renault", "lexus", "ford", "bmw", "honda", "toyota"));
 
 
     public static void validateSaveInputs(String carPlateId, String brand, String model, String color, String carType,

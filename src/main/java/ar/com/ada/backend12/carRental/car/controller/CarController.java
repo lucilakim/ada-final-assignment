@@ -5,6 +5,7 @@ import ar.com.ada.backend12.carRental.car.model.CarList;
 import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.car.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
+import ar.com.ada.backend12.carRental.util.api.ApiUtil;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
@@ -27,6 +28,8 @@ public class CarController {
     private CarService carService;
     @Autowired
     DateUtil dateUtil;
+    @Autowired
+    ApiUtil apiUtil;
 
     @PostMapping("/car")
     public ResponseEntity<ApiReturnable> save(
@@ -42,6 +45,11 @@ public class CarController {
             @RequestParam(name = "dailyRent") BigDecimal dailyRent
     ) {
         CarValidator.validateSaveInputs(carPlateId, brand, model, color, carType, passengersNumber, mileage, airConditioning, dailyRent);
+        String brandException  = "bmw";
+        String modelException = "suv";
+        brand = (!brand.toLowerCase().equals(brandException)) ? apiUtil.convertUppercase(brand) : brand.toUpperCase();
+        model = (!model.toLowerCase().equals(modelException)) ? apiUtil.convertUppercase(model) : model.toUpperCase();
+        carPlateId = carPlateId.toUpperCase();
         logger.info("Trying to insert a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Car c = new Car(carPlateId, brand, model, year, color, carType, passengersNumber, mileage, airConditioning, dailyRent);

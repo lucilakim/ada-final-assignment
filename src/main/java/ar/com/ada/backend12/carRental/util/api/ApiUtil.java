@@ -8,4 +8,5 @@ public interface ApiUtil {
     public Date parseDate(String stringBirthDate);
     public int getAge(Date birthDate);
     public CustomerDto getCustomerDto(Integer idCardNumber, String firstName, String lastName, String phoneNumber, Date birthDate, Date idCardExpiration);
+    public String convertUppercase(String string);
 }
