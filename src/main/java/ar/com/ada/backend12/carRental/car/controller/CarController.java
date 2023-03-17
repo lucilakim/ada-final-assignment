@@ -41,11 +41,11 @@ public class CarController {
             @RequestParam(name = "mileage") Integer mileage,
             @RequestParam(name = "airConditioning") String airConditioning,
             @RequestParam(name = "dailyRent") BigDecimal dailyRent
-            ){
-        CarValidator.validateSaveInputs(carPlateId,brand,model,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
+    ) {
+        CarValidator.validateSaveInputs(carPlateId, brand, model, color, carType, passengersNumber, mileage, airConditioning, dailyRent);
         logger.info("Trying to insert a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
-        Car c = new Car(carPlateId,brand,model,year,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
+        Car c = new Car(carPlateId, brand, model, year, color, carType, passengersNumber, mileage, airConditioning, dailyRent);
         Car car = carService.save(c);
         return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
@@ -54,32 +54,19 @@ public class CarController {
     private ResponseEntity<ApiReturnable> update(
             @PathVariable(name = "carPlateId") String carPlateId,
             @RequestBody PatchCarReqBody body
-        ){
-        CarValidator.validateUpdateInputs(carPlateId,body.getBrand(),body.getModel(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
+    ) {
+        CarValidator.validateUpdateInputs(carPlateId, body.getBrand(), body.getModel(), body.getColor(), body.getCarType(), body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
         logger.info("Trying to update a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
-        Car car = new Car(carPlateId,body.getBrand(),body.getModel(),body.getYear(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
+        Car car = new Car(carPlateId, body.getBrand(), body.getModel(), body.getYear(), body.getColor(), body.getCarType(), body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
         Car updatedCar = carService.update(carPlateId, car);
         return new ResponseEntity<>(updatedCar, HttpStatus.OK);
-    }
-
-    @PatchMapping("/car/")
-    private ResponseEntity<ApiReturnable> update() {
-        logger.info("Trying to update a Car in the database without car plate id.");
-        return new ResponseEntity<>(new ApiMessage("The license plate of the car can not be null or empty. " +
-                "Please try again with the correct path ex /car/abc123"), HttpStatus.BAD_REQUEST);
-    }
-    @GetMapping("/car/")
-    private ResponseEntity<ApiReturnable> get() {
-        logger.info("Trying to get a Car in the database without car plate id.");
-        return new ResponseEntity<>(new ApiMessage("The license plate of the car can not be null or empty. " +
-                "Please try again with the correct path ex /car/abc123"), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> get(
             @PathVariable(name = "carPlateId") String carPlateId
-        ){
+    ) {
         CarValidator.validateCarPlateId(carPlateId);
         logger.info("Trying to get a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
@@ -93,34 +80,27 @@ public class CarController {
             @RequestParam(name = "passengersNumber", required = false) Integer passengersNumber,
             @RequestParam(name = "airConditioning", required = false) String airConditioning,
             @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
-         //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
-        ) {
+            //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
+    ) {
         CarValidator.validateGetAllInput(carType, passengersNumber, airConditioning, dailyRent);
         logger.info("Trying to get all Cars in the database.");
         CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent);
         return new ResponseEntity<>(carList, HttpStatus.OK);
     }
 
-    @DeleteMapping("/car/")
-    private ResponseEntity<ApiReturnable> delete() {
-        logger.info("Trying to delete a Car in the database without car plate id.");
-        return new ResponseEntity<>(new ApiMessage("The car plate id of the customer can not be null or empty." +
-                "Please try again with the correct path ex /car/ABC123"), HttpStatus.BAD_REQUEST);
-    }
-
     @DeleteMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> delete(
             @PathVariable(name = "carPlateId") String carPlateId
-        ){
+    ) {
         CarValidator.validateCarPlateId(carPlateId);
         logger.info("Trying to delete a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         carService.delete(carPlateId);
-        return new ResponseEntity<>(new ApiMessage(String.format("The car with license plate %s was successfully removed.",carPlateId)),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiMessage(String.format("The car with license plate %s was successfully removed.", carPlateId)), HttpStatus.OK);
     }
 
     @GetMapping("/carBrand")
-    private ResponseEntity<ApiReturnable> getBrands(){
+    private ResponseEntity<ApiReturnable> getBrands() {
         logger.info("Trying to get the Car brands from the database.");
         CarBrands carBrands = carService.getCarBrands();
         return new ResponseEntity<>(carBrands, HttpStatus.OK);
