@@ -1,4 +1,4 @@
-package ar.com.ada.backend12.carRental.car.util;
+package ar.com.ada.backend12.carRental.util.api;
 
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import ar.com.ada.backend12.carRental.util.date.validation.DateValidator;
@@ -13,17 +13,17 @@ import java.time.ZoneOffset;
 import java.util.Date;
 
 @Component
-public class CustomerUtilImpl implements CustomerUtil {
-    private static final Logger logger = LoggerFactory.getLogger(CustomerUtilImpl.class);
+public class AppUtilImpl implements AppUtil {
+    private static final Logger logger = LoggerFactory.getLogger(AppUtilImpl.class);
     @Autowired
     private DateValidator dateValidator;
     @Autowired
     private DateUtil dateUtil;
 
-    public CustomerUtilImpl() {
+    public AppUtilImpl() {
     }
 
-    public CustomerUtilImpl(DateValidator dateValidator, DateUtil dateUtil) {
+    public AppUtilImpl(DateValidator dateValidator, DateUtil dateUtil) {
         this.dateValidator = dateValidator;
         this.dateUtil = dateUtil;
     }

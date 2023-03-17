@@ -1,7 +1,7 @@
 package ar.com.ada.backend12.carRental.contract.validation;
 
-import ar.com.ada.backend12.carRental.car.util.CustomerUtil;
-import ar.com.ada.backend12.carRental.car.util.CustomerUtilImpl;
+import ar.com.ada.backend12.carRental.util.api.AppUtil;
+import ar.com.ada.backend12.carRental.util.api.AppUtilImpl;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
 import ar.com.ada.backend12.carRental.customer.validation.CustomerValidator;
 import ar.com.ada.backend12.carRental.exception.BadRequestException;
@@ -13,13 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.text.DecimalFormat;
 
 public class ContractValidator {
     static Logger logger = LoggerFactory.getLogger(CustomerValidator.class);
     static DateUtil DATE_UTIL = new DateUtilImp();
     static DateValidator DATE_VALIDATOR = new DateValidatorImpl(DATE_UTIL);
-    static CustomerUtil CUSTOMER_UTIL = new CustomerUtilImpl(DATE_VALIDATOR, DATE_UTIL);
+    static AppUtil CUSTOMER_UTIL = new AppUtilImpl(DATE_VALIDATOR, DATE_UTIL);
 
     public static void validateSaveInputs(String carPlateId, Integer idCardNumber, String stringStartDay, Integer duration, BigDecimal amountPaid, BigDecimal dailyRent) {
         CarValidator.validateCarPlateId(carPlateId);
@@ -27,6 +27,15 @@ public class ContractValidator {
         validateStringStartDay(stringStartDay);
         validateDuration(duration);
         validateAmountPaid(amountPaid, duration, dailyRent);
+    }
+
+    public static void validateContractNumber(Integer contractNumber) {
+        if (contractNumber != null) {
+            final int MINIMUM_LENGTH = 1000;
+            final int MAX_LENGTH = 10000;
+            validateCondition(contractNumber >= MINIMUM_LENGTH && contractNumber < MAX_LENGTH,
+                    "The contract number is incorrect. It must be a numeric value, have four digits, and cannot begin with 0..");
+        }
     }
 
     private static void validateStringStartDay(String stringStartDay) {
@@ -60,10 +69,12 @@ public class ContractValidator {
     private static void validateAmountPaid(BigDecimal amountPaid, Integer duration, BigDecimal dailyRent) {
         if (amountPaid != null) {
             final float MINIMUM_PERCENTAGE = 0.75f;
+            DecimalFormat df = new DecimalFormat("#.00");
             BigDecimal minimumPaid = (dailyRent.multiply(BigDecimal.valueOf(duration))).multiply(BigDecimal.valueOf(MINIMUM_PERCENTAGE));
             BigDecimal balance = dailyRent.multiply(BigDecimal.valueOf(duration));
             validateCondition(amountPaid.compareTo(minimumPaid) >= 0,
-                    String.format("The amount paid: %s must be greater than or equal to 75% of the contract balance: %s.", amountPaid, balance));
+                    "The amount paid: " + amountPaid + " must be greater than or equal to 75% of " +
+                            "the total contract balance: $" + balance + ". Minimum payment with 75%: $" + df.format(minimumPaid));
         }
     }
 

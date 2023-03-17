@@ -1,7 +1,7 @@
 package ar.com.ada.backend12.carRental.customer.validation;
 
-import ar.com.ada.backend12.carRental.car.util.CustomerUtil;
-import ar.com.ada.backend12.carRental.car.util.CustomerUtilImpl;
+import ar.com.ada.backend12.carRental.util.api.AppUtil;
+import ar.com.ada.backend12.carRental.util.api.AppUtilImpl;
 import ar.com.ada.backend12.carRental.exception.BadRequestException;
 
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
@@ -17,7 +17,7 @@ public class CustomerValidator {
     static Logger logger = LoggerFactory.getLogger(CustomerValidator.class);
     static DateUtil DATE_UTIL = new DateUtilImp();
     static DateValidator DATE_VALIDATOR = new DateValidatorImpl(DATE_UTIL);
-    static CustomerUtil CUSTOMER_UTIL = new CustomerUtilImpl(DATE_VALIDATOR, DATE_UTIL);
+    static AppUtil CUSTOMER_UTIL = new AppUtilImpl(DATE_VALIDATOR, DATE_UTIL);
     private static final String PHONE_NUMBER_REGEX = "^\\([0-9]{3}\\)\\s[0-9]{3}-[0-9]{2}-[0-9]{2}$";
 
 

@@ -1,8 +1,8 @@
-package ar.com.ada.backend12.carRental.car.util;
+package ar.com.ada.backend12.carRental.util.api;
 
 import java.util.Date;
 
-public interface CustomerUtil {
+public interface AppUtil {
     public Date parseDate(String stringBirthDate);
     public int getAge(Date birthDate);
 }

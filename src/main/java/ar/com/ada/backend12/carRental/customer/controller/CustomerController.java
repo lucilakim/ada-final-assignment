@@ -1,7 +1,7 @@
 package ar.com.ada.backend12.carRental.customer.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.car.util.CustomerUtil;
+import ar.com.ada.backend12.carRental.util.api.AppUtil;
 import ar.com.ada.backend12.carRental.customer.dto.PatchCustomerReqBody;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.customer.model.CustomerList;
@@ -33,7 +33,7 @@ public class CustomerController {
     @Autowired
     private DateUtil dateUtil;
     @Autowired
-    CustomerUtil customerUtil;
+    AppUtil appUtil;
 
     @PostMapping("/customer")
     private ResponseEntity<ApiReturnable> save(
@@ -45,8 +45,8 @@ public class CustomerController {
             , @RequestParam(name = "phoneNumber") String phoneNumber
     ) {
         CustomerValidator.validateSaveInputs(idCardNumber, firstName, lastName, stringBirthDate, stringIdCardExpiration, phoneNumber);
-        Date birthDate = customerUtil.parseDate(stringBirthDate);
-        Date idCardExpiration = customerUtil.parseDate(stringIdCardExpiration);
+        Date birthDate = appUtil.parseDate(stringBirthDate);
+        Date idCardExpiration = appUtil.parseDate(stringIdCardExpiration);
 
         logger.info("Trying to insert a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
@@ -63,9 +63,8 @@ public class CustomerController {
         CustomerValidator.validateUpdateInputs(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(),
                 customerBody.getBirthDate(), customerBody.getIdCardExpiration(), customerBody.getPhoneNumber());
         Date birthDate = null;
-        if (customerBody.getBirthDate() != null) birthDate = customerUtil.parseDate(customerBody.getBirthDate());
-        Date idCardExpiration = null;
-        if (idCardExpiration != null) idCardExpiration = customerUtil.parseDate(customerBody.getIdCardExpiration());
+        if (customerBody.getBirthDate() != null) birthDate = appUtil.parseDate(customerBody.getBirthDate());
+        Date idCardExpiration = appUtil.parseDate(customerBody.getIdCardExpiration());
 
         logger.info("Trying to update a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
