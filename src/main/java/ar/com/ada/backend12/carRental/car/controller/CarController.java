@@ -42,7 +42,7 @@ public class CarController {
             @RequestParam(name = "airConditioning") String airConditioning,
             @RequestParam(name = "dailyRent") BigDecimal dailyRent
             ){
-        CarValidator.validateAllInputs(carPlateId,brand,model,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
+        CarValidator.validateSaveInputs(carPlateId,brand,model,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
         logger.info("Trying to insert a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Car c = new Car(carPlateId,brand,model,year,color,carType,passengersNumber,mileage,airConditioning,dailyRent);
@@ -55,7 +55,7 @@ public class CarController {
             @PathVariable(name = "carPlateId") String carPlateId,
             @RequestBody PatchCarReqBody body
         ){
-        CarValidator.validateAllInputs(carPlateId,body.getBrand(),body.getModel(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
+        CarValidator.validateUpdateInputs(carPlateId,body.getBrand(),body.getModel(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
         logger.info("Trying to update a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Car car = new Car(carPlateId,body.getBrand(),body.getModel(),body.getYear(),body.getColor(),body.getCarType(),body.getPassengersNumber(),body.getMileage(),body.getAirConditioning(),body.getDailyRent());
