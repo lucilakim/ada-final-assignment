@@ -29,6 +29,11 @@ public class ContractValidator {
         validateAmountPaid(amountPaid, duration, dailyRent);
     }
 
+    public static void validateUpdateContract(BigDecimal amountPaid, BigDecimal totalBalance) {
+        validateCondition(totalBalance.compareTo(amountPaid) == 0,
+                "The amount entered of $" + amountPaid + " does not match the total balance of $" + totalBalance + ".");
+    }
+
     public static void validateContractNumber(Integer contractNumber) {
         if (contractNumber != null) {
             final int MINIMUM_LENGTH = 1000;

@@ -1,14 +1,12 @@
 package ar.com.ada.backend12.carRental.contract.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
 import ar.com.ada.backend12.carRental.contract.dto.PatchContractReqBody;
 import ar.com.ada.backend12.carRental.contract.model.*;
 import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.contract.validation.ContractValidator;
-import ar.com.ada.backend12.carRental.customer.validation.CustomerValidator;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.api.AppUtil;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
@@ -85,11 +83,18 @@ public class ContractController {
             @PathVariable(name = "contractNumber") Integer contractNumber,
             @RequestBody PatchContractReqBody body
     ) {
+        ContractValidator.validateContractNumber(contractNumber);
+        ContractInfo contractInfo = null;
+        BigDecimal totalBalance = null;
+        Optional<ContractBase> contractBase = contractService.get(contractNumber);
+        if (contractBase.isPresent()) contractInfo = contractService.getInfoContract(contractBase.get());
+        if (contractInfo != null) totalBalance = contractInfo.getTotalBalance();
+        ContractValidator.validateUpdateContract(body.getAmountPaid(), totalBalance);
+
         logger.info("Trying to update a Contract in the database.");
         logger.debug(String.format("contractNumber [ %s ].", contractNumber));
         BigDecimal twoDecimalsAmountPaid = body.getAmountPaid().setScale(2);
         contractService.update(contractNumber, twoDecimalsAmountPaid);
-
         return new ResponseEntity<>(new ApiMessage("Contract: " + contractNumber + " closed. And your ending balance is $0."), HttpStatus.OK);
     }
 }
