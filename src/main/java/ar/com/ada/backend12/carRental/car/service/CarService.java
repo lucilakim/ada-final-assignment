@@ -14,6 +14,4 @@ public interface CarService {
     public Car update(String plate, Car c);
 
     public void delete(String plate);
-    public CarBrands getCarBrands();
-
 }

@@ -98,11 +98,4 @@ public class CarController {
         carService.delete(carPlateId);
         return new ResponseEntity<>(new ApiMessage(String.format("The car with license plate %s was successfully removed.", carPlateId)), HttpStatus.OK);
     }
-
-    @GetMapping("/carBrand")
-    private ResponseEntity<ApiReturnable> getBrands() {
-        logger.info("Trying to get the Car brands from the database.");
-        CarBrands carBrands = carService.getCarBrands();
-        return new ResponseEntity<>(carBrands, HttpStatus.OK);
-    }
 }

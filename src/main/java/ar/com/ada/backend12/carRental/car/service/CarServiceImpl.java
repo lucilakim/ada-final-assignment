@@ -87,9 +87,4 @@ public class CarServiceImpl implements CarService{
 
         carDAO.delete(car.get());
     }
-
-    @Override
-    public CarBrands getCarBrands() {
-        return new CarBrands(carDAO.getCarBrands());
-    }
 }
