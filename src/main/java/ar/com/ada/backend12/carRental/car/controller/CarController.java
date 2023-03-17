@@ -101,6 +101,13 @@ public class CarController {
         return new ResponseEntity<>(carList, HttpStatus.OK);
     }
 
+    @DeleteMapping("/car/")
+    private ResponseEntity<ApiReturnable> delete() {
+        logger.info("Trying to delete a Car in the database without car plate id.");
+        return new ResponseEntity<>(new ApiMessage("The car plate id of the customer can not be null or empty." +
+                "Please try again with the correct path ex /car/ABC123"), HttpStatus.BAD_REQUEST);
+    }
+
     @DeleteMapping("/car/{carPlateId}")
     private ResponseEntity<ApiReturnable> delete(
             @PathVariable(name = "carPlateId") String carPlateId
