@@ -41,7 +41,7 @@ public class CustomerValidation {
         validatePhoneNumberNotRequired(phoneNumber);
     }
 
-    private static void validateIdCardNumber(Integer idCardNumber) {
+    public static void validateIdCardNumber(Integer idCardNumber) {
         if (idCardNumber != null) {
             validateCondition(idCardNumber > 100000000 && idCardNumber < 1000000000,
                     "The format of the id card number is incorrect. It should contain 9 numbers.");

@@ -80,13 +80,20 @@ public class CustomerController {
                 "Please try again with the correct path ex /customer/123456789."), HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/customer/")
+    private ResponseEntity<ApiReturnable> get() {
+        logger.info("Trying to get a Customer in the database without customer id card number.");
+        return new ResponseEntity<>(new ApiMessage("The id card number of the customer can not be null or empty. " +
+                "Please try again with the correct path ex /car/123456789"), HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/customer/{idCardNumber}")
     private ResponseEntity<ApiReturnable> get(
             @PathVariable(name = "idCardNumber") Integer idCardNumber
     ){
+        CustomerValidation.validateIdCardNumber(idCardNumber);
         logger.info("Trying to get a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
-
         Optional<Customer> customer = customerService.get(idCardNumber);
         return new ResponseEntity<ApiReturnable>(customer.get(), HttpStatus.OK);
     }
