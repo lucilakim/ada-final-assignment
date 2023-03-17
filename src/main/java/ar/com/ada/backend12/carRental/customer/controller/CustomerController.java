@@ -1,6 +1,7 @@
 package ar.com.ada.backend12.carRental.customer.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
+import ar.com.ada.backend12.carRental.customer.dto.CustomerDto;
 import ar.com.ada.backend12.carRental.util.api.AppUtil;
 import ar.com.ada.backend12.carRental.customer.dto.PatchCustomerReqBody;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
@@ -80,8 +81,8 @@ public class CustomerController {
         CustomerValidator.validateIdCardNumber(idCardNumber);
         logger.info("Trying to get a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
-        Optional<Customer> customer = customerService.get(idCardNumber);
-        return new ResponseEntity<ApiReturnable>(customer.get(), HttpStatus.OK);
+        CustomerDto customerDto = customerService.getReturnableCustomer(idCardNumber);
+        return new ResponseEntity<ApiReturnable>(customerDto, HttpStatus.OK);
     }
 
     @GetMapping("/customer")

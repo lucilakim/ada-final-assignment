@@ -3,10 +3,12 @@ package ar.com.ada.backend12.carRental.customer.service;
 import ar.com.ada.backend12.carRental.contract.model.ContractBase;
 import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.customer.DAO.CustomerDAO;
+import ar.com.ada.backend12.carRental.customer.dto.CustomerDto;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.customer.model.CustomerList;
 import ar.com.ada.backend12.carRental.exception.BadRequestException;
 import ar.com.ada.backend12.carRental.exception.NotFoundException;
+import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class CustomerServiceImpl implements CustomerService {
     CustomerDAO customerDAO;
     @Autowired
     ContractService contractService;
+    @Autowired
+    DateUtil dateUtil;
 
     @Override
     public Customer save(Customer c) {
@@ -51,10 +55,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<Customer> get(Integer idCardNumber) {
         Optional<Customer> customer = customerDAO.findById(idCardNumber);
-        if(customer.isEmpty()) {
-            throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
-        }
+        if(customer.isEmpty()) throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
         return customer;
+    }
+    @Override
+    public CustomerDto getReturnableCustomer(Integer idCardNumber) {
+        Optional<Customer> customer = customerDAO.findById(idCardNumber);
+        if(customer.isEmpty()) throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
+
+        CustomerDto customerDto = new CustomerDto(idCardNumber, customer.get().getFirstName(), customer.get().getLastName(), customer.get().getPhoneNumber());
+        customerDto.setBirthDate(dateUtil.parseString(customer.get().getBirthDate()));
+        customerDto.setIdCardExpiration(dateUtil.parseString(customer.get().getIdCardExpiration()));
+        return customerDto;
     }
 
     @Override
