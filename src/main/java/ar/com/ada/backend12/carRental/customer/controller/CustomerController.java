@@ -1,10 +1,12 @@
 package ar.com.ada.backend12.carRental.customer.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
+import ar.com.ada.backend12.carRental.car.util.CustomerUtil;
 import ar.com.ada.backend12.carRental.customer.dto.PatchCustomerReqBody;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.customer.model.CustomerList;
 import ar.com.ada.backend12.carRental.customer.service.CustomerService;
+import ar.com.ada.backend12.carRental.customer.validation.CustomerValidation;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
@@ -30,6 +32,8 @@ public class CustomerController {
     private DateValidator dateValidator;
     @Autowired
     private DateUtil dateUtil;
+    @Autowired
+    CustomerUtil customerUtil;
 
     @PostMapping("/customer")
     private ResponseEntity<ApiReturnable> save(
@@ -40,36 +44,13 @@ public class CustomerController {
             ,@RequestParam(name = "idCardExpiration") String stringIdCardExpiration
             ,@RequestParam(name = "phoneNumber") String phoneNumber
     ){
+        CustomerValidation.validateAllInputs(idCardNumber, firstName, lastName, stringBirthDate, stringIdCardExpiration, phoneNumber);
+        Date birthDate = customerUtil.parseDate(stringBirthDate);
+        Date idCardExpiration = customerUtil.parseDate(stringIdCardExpiration);
+
+
         logger.info("Trying to insert a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
-
-        Date birthDate = null;
-        Date idCardExpiration = null;
-        if(stringBirthDate != null) {
-            if(dateValidator.isValid(stringBirthDate)){
-                try {
-                    birthDate = dateUtil.parseDate(stringBirthDate);
-                } catch (Exception e) {
-                    logger.error("Error trying to change the data type from string to date in birthDate", e);
-                    return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the Customer could not be updated."), HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            } else {
-                return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. " + stringBirthDate + " The expected format is yyyy-MM-dd in birthDate"), HttpStatus.BAD_REQUEST);
-            }
-        }
-        if(stringIdCardExpiration != null) {
-            if(dateValidator.isValid(stringIdCardExpiration)){
-                try {
-                    idCardExpiration = dateUtil.parseDate(stringIdCardExpiration);
-                } catch (Exception e) {
-                    logger.error("Error trying to change the data type from string to date in birthDate", e);
-                    return new ResponseEntity<ApiReturnable>(new ApiMessage("An error has occurred and the Customer could not be updated."), HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            } else {
-                return new ResponseEntity<ApiReturnable>(new ApiMessage("The date format is not valid. " + stringIdCardExpiration + " The expected format is yyyy-MM-dd in IdCardExpiration"), HttpStatus.BAD_REQUEST);
-            }
-        }
-
         Customer customer = new Customer(idCardNumber, firstName, lastName, birthDate, idCardExpiration, phoneNumber);
         Customer customerSaved = customerService.save(customer);
         return new ResponseEntity<ApiReturnable>(customerSaved,HttpStatus.OK);
