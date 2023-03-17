@@ -84,7 +84,7 @@ public class CustomerController {
     private ResponseEntity<ApiReturnable> get() {
         logger.info("Trying to get a Customer in the database without customer id card number.");
         return new ResponseEntity<>(new ApiMessage("The id card number of the customer can not be null or empty. " +
-                "Please try again with the correct path ex /car/123456789"), HttpStatus.BAD_REQUEST);
+                "Please try again with the correct path ex /customer/123456789"), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/customer/{idCardNumber}")
@@ -109,7 +109,7 @@ public class CustomerController {
     private ResponseEntity<ApiReturnable> delete() {
         logger.info("Trying to delete a Customer in the database without customer id card number.");
         return new ResponseEntity<>(new ApiMessage("The id card number of the customer can not be null or empty." +
-                "Please try again with the correct path ex /car/123456789"), HttpStatus.BAD_REQUEST);
+                "Please try again with the correct path ex /customer/123456789"), HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/customer/{idCardNumber}")
