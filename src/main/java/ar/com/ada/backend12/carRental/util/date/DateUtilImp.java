@@ -20,7 +20,10 @@ public class DateUtilImp implements DateUtil {
     @Autowired
     public DateUtilImp() {
         super();
-        this.sdf = new SimpleDateFormat("yyyy-MM-dd");
+    }
+
+    public DateUtilImp(DateFormat sdf) {
+        this.sdf = sdf;
     }
 
     /**
@@ -61,6 +64,7 @@ public class DateUtilImp implements DateUtil {
      */
     @Override
     public String parseString(Date date) {
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);
     }
 }

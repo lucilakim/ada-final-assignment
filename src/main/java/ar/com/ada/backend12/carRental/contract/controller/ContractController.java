@@ -8,7 +8,7 @@ import ar.com.ada.backend12.carRental.contract.model.*;
 import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.contract.validation.ContractValidator;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
-import ar.com.ada.backend12.carRental.util.api.AppUtil;
+import ar.com.ada.backend12.carRental.util.api.ApiUtil;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import ar.com.ada.backend12.carRental.util.date.validation.DateValidator;
@@ -35,7 +35,7 @@ public class ContractController {
     @Autowired
     DateUtil dateUtil;
     @Autowired
-    AppUtil appUtil;
+    ApiUtil apiUtil;
 
     @PostMapping("/contract")
     private ResponseEntity<ApiReturnable> save(
@@ -50,7 +50,7 @@ public class ContractController {
         Date startDay = null;
         if (CarValidator.carPlateIdIsValid(carPlateId)) carDailyRent = carService.get(carPlateId).get().getDailyRent();
         ContractValidator.validateSaveInputs(carPlateId, idCardNumber, stringStartDay, duration, amountPaid, carDailyRent);
-        if (stringStartDay != null) startDay = appUtil.parseDate(stringStartDay);
+        if (stringStartDay != null) startDay = apiUtil.parseDate(stringStartDay);
 
         ContractBase contractBase = new ContractBase(carPlateId, idCardNumber, startDay, duration, amountPaid);
         logger.info("Trying to save a Contract in the database.");

@@ -5,13 +5,15 @@ import ar.com.ada.backend12.carRental.contract.service.ContractService;
 import ar.com.ada.backend12.carRental.customer.DAO.CustomerDAO;
 import ar.com.ada.backend12.carRental.customer.dto.CustomerDto;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
-import ar.com.ada.backend12.carRental.customer.model.CustomerList;
+import ar.com.ada.backend12.carRental.customer.dto.CustomersDto;
 import ar.com.ada.backend12.carRental.exception.BadRequestException;
 import ar.com.ada.backend12.carRental.exception.NotFoundException;
+import ar.com.ada.backend12.carRental.util.api.ApiUtil;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,9 @@ public class CustomerServiceImpl implements CustomerService {
     ContractService contractService;
     @Autowired
     DateUtil dateUtil;
+
+    @Autowired
+    ApiUtil apiUtil;
 
     @Override
     public Customer save(Customer c) {
@@ -58,10 +63,12 @@ public class CustomerServiceImpl implements CustomerService {
         if(customer.isEmpty()) throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
         return customer;
     }
+
     @Override
     public CustomerDto getReturnableCustomer(Integer idCardNumber) {
         Optional<Customer> customer = customerDAO.findById(idCardNumber);
         if(customer.isEmpty()) throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
+
 
         CustomerDto customerDto = new CustomerDto(idCardNumber, customer.get().getFirstName(), customer.get().getLastName(), customer.get().getPhoneNumber());
         customerDto.setBirthDate(dateUtil.parseString(customer.get().getBirthDate()));
@@ -70,12 +77,21 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerList getAll() {
+    public CustomersDto getAll() {
         List<Customer> customers = customerDAO.findAll();
-        if(customers.isEmpty()) {
-            throw new NotFoundException("The list of clients is empty. There is no client yet.");
+        List<CustomerDto> dto = new ArrayList<>();
+        if(customers.isEmpty()) throw new NotFoundException("The list of clients is empty. There is no client yet.");
+
+        Customer customer = null;
+        CustomerDto customerDto = null;
+        for (int i = 0; i < customers.size(); i++) {
+            customer = customers.get(i);
+            customerDto = apiUtil.getCustomerDto(customer.getIdCardNumber(), customer.getFirstName(), customer.getLastName(),
+                    customer.getPhoneNumber(), customer.getBirthDate(), customer.getIdCardExpiration());
+            dto.add(customerDto);
         }
-        return new CustomerList(customers);
+        CustomersDto customersDto = new CustomersDto(dto);
+        return customersDto;
     }
 
     @Override

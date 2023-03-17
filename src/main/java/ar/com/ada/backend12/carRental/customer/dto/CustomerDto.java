@@ -18,7 +18,6 @@ public class CustomerDto implements ApiReturnable {
         this(idCardNumber, firstName, lastName, null, null, phoneNumber);
     }
 
-
     public CustomerDto(Integer idCardNumber, String firstName, String lastName, String birthDate, String idCardExpiration, String phoneNumber) {
         this.idCardNumber = idCardNumber;
         this.firstName = firstName;
