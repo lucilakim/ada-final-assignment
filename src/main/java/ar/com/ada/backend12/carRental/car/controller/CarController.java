@@ -79,12 +79,12 @@ public class CarController {
             @RequestParam(name = "carType", required = false) String carType,
             @RequestParam(name = "passengersNumber", required = false) Integer passengersNumber,
             @RequestParam(name = "airConditioning", required = false) String airConditioning,
-            @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
-            //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
+            @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent,
+            @RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
     ) {
-        CarValidator.validateGetAllInput(carType, passengersNumber, airConditioning, dailyRent);
+        CarValidator.validateGetAllInput(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
         logger.info("Trying to get all Cars in the database.");
-        CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent);
+        CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
         return new ResponseEntity<>(carList, HttpStatus.OK);
     }
 

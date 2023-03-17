@@ -19,7 +19,7 @@ public class CarDAOCustomImpl implements CarDAOCustom{
     private EntityManager entityManager;
 
     @Override
-    public List<Car> getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
+    public List<Car> getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent, String onlyAvailable) {
         StringBuilder queryBuilder = new StringBuilder("select c from Car c ");
 
         List<String> conditions = new ArrayList<>();
@@ -35,6 +35,13 @@ public class CarDAOCustomImpl implements CarDAOCustom{
         }
         if(dailyRent != null) {
             conditions.add("c.dailyRent = :dailyRent");
+        }
+        if(onlyAvailable != null) {
+            if(onlyAvailable.equals("SI")) {
+                conditions.add("c.associatedContract <> null");
+            } else {
+                conditions.add("c.associatedContract = null");
+            }
         }
 
         if(conditions.size() > 0) {

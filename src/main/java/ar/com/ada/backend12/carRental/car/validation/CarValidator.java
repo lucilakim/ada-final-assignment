@@ -10,6 +10,7 @@ import java.util.Set;
 public class CarValidator {
     private static final String CAR_PLATE_REGEX = "^[A-Za-z]{3}[0-9]{3}$";
     private static final Set<String> CAR_TYPES = new HashSet<>(Arrays.asList("sedan", "hatchback", "suv", "van"));
+    private static final Set<String> AVAILABLE = new HashSet<>(Arrays.asList("si", "no"));
     private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("Audi", "BMW", "renault", "lexus", "ford", "bmw", "honda", "toyota"));
     private static final Set<String> AIR_CONDITIONING_VALUES = new HashSet<>(Arrays.asList("yes", "no"));
 
@@ -37,13 +38,21 @@ public class CarValidator {
         validateAirConditioningNotRequired(airConditioning);
         validateDailyRent(dailyRent);
     }
-    public static void validateGetAllInput(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
+    public static void validateGetAllInput(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent, String onlyAvailable) {
         validateCarTypeNotRequired(carType);
         validatePassengerNumber(passengersNumber);
         validateAirConditioningNotRequired(airConditioning);
         validateDailyRent(dailyRent);
+        validateOnlyAvailable(onlyAvailable);
     }
 
+    private static void validateOnlyAvailable(String onlyAvailable) {
+        if(onlyAvailable != null) {
+            onlyAvailable.trim().toLowerCase();
+            validateCondition(AVAILABLE.contains(onlyAvailable),
+                    "The value of the parameter onlyAvailable is not valid. The options are Yes or No.");
+        }
+    }
     private static void validateCondition(boolean condition, String errorMessage) {
         if (!condition) {
             throw new BadRequestException(errorMessage);

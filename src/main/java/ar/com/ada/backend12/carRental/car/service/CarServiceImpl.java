@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -64,8 +65,9 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public CarList getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent){
-        List<Car> cars = carDAO.getAll(carType, passengersNumber, airConditioning, dailyRent);
+    public CarList getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent, String onlyAvailable){
+        List<Car> cars = carDAO.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable.toUpperCase());
+        System.out.println(onlyAvailable);
         if (cars.isEmpty()) {
             throw new NotFoundException("The list of cars (with the filters) is empty.");
         }
