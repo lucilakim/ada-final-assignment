@@ -29,9 +29,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
-
 # ---------- Mac ----------
 # Folder view configuration files
 .DS_Store
@@ -58,3 +55,6 @@ Thumbs.db
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#Logs
+log/

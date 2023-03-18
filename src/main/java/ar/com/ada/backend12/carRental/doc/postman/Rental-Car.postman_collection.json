@@ -1,0 +1,1166 @@
+{
+	"info": {
+		"_postman_id": "264d6baa-2810-406e-b7c5-3fef5326f38f",
+		"name": "Rental-Car",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25877965"
+	},
+	"item": [
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "Save Car",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "carPlateId",
+									"value": "swf320",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "bMw",
+									"type": "text"
+								},
+								{
+									"key": "model",
+									"value": "X5",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "2015",
+									"type": "text"
+								},
+								{
+									"key": "color",
+									"value": "Black",
+									"type": "text"
+								},
+								{
+									"key": "carType",
+									"value": "sUv",
+									"type": "text"
+								},
+								{
+									"key": "passengersNumber",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "mileage",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "airConditioning",
+									"value": "YeS",
+									"type": "text"
+								},
+								{
+									"key": "dailyRent",
+									"value": "30",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost/car",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"car"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Car",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"BMw\",\n    \"model\": \"Captur\",\n    \"year\": 2011,\n    \"color\": \"White\",\n    \"carType\": \"suv\",\n    \"passengersNumber\": null,\n    \"mileage\": 101,\n    \"airConditioning\": \"Yes\",\n    \"dailyRent\": 25\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/car/ABC123",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"car",
+								"ABC123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All filter by available",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/car?onlyAvailable=NO",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"car"
+							],
+							"query": [
+								{
+									"key": "onlyAvailable",
+									"value": "NO"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All with FIlter",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/car?carType=sedan&passengersNumber=5&airConditioning=yes&dailyRent=18&onlyAvailable=Yes",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"car"
+							],
+							"query": [
+								{
+									"key": "carType",
+									"value": "sedan"
+								},
+								{
+									"key": "passengersNumber",
+									"value": "5"
+								},
+								{
+									"key": "airConditioning",
+									"value": "yes"
+								},
+								{
+									"key": "dailyRent",
+									"value": "18"
+								},
+								{
+									"key": "onlyAvailable",
+									"value": "Yes"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a car",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/car/ABC123",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"car",
+								"ABC123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/car/ABC123",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"car",
+								"ABC123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all car brands",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/carBrand",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"carBrand"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all car types",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/carType",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"carType"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Post a customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "idCardNumber",
+									"value": "123058632",
+									"type": "text"
+								},
+								{
+									"key": "firstName",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Parker",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "2000-01-02",
+									"type": "text"
+								},
+								{
+									"key": "idCardExpiration",
+									"value": "2027-02-10",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "(003) 471-63-46",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost/customer",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a customer",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Jorge\",\n    \"lastName\": null,\n    \"birthDate\": \"2000-05-20\",\n    \"idCardExpiration\": \"2020-05-03\",\n    \"phoneNumber\": \"(633) 454-05-67\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/customer/123456783",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"customer",
+								"123456783"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a customer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/customer/12345678",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"customer",
+								"12345678"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All customers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/customer",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a customer",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost/customer/12305863",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"customer",
+								"12305863"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contract",
+			"item": [
+				{
+					"name": "Save a contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "carPlateId",
+									"value": "HLU751",
+									"type": "text"
+								},
+								{
+									"key": "idCardNumber",
+									"value": "895867295",
+									"type": "text"
+								},
+								{
+									"key": "startDay",
+									"value": "2023-03-13",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "15",
+									"type": "text"
+								},
+								{
+									"key": "amountPaid",
+									"value": "337.50",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost/contract",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"contract"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a contract",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/contract/1000",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"contract",
+								"1000"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All the contracts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost/contract",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"contract"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update(close) a contract",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "vigente",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "falgodon",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "abcd123",
+								"type": "text"
+							},
+							{
+								"key": "expiradas",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "username",
+								"value": "mgonzalez",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "password",
+								"value": "qsef280",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amountPaid\": 760\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/contract/1000",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"contract",
+								"1000"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Post an user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "pass",
+									"type": "text"
+								},
+								{
+									"key": "expirationDate",
+									"value": "2024-11-09",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost/user?username=",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
