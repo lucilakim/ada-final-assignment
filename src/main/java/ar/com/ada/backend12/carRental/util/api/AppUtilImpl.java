@@ -1,5 +1,6 @@
 package ar.com.ada.backend12.carRental.util.api;
 
+import ar.com.ada.backend12.carRental.customer.dto.CustomerDto;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import ar.com.ada.backend12.carRental.util.date.validation.DateValidator;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import java.time.ZoneOffset;
 import java.util.Date;
 
 @Component
-public class AppUtilImpl implements AppUtil {
+public class AppUtilImpl implements ApiUtil {
     private static final Logger logger = LoggerFactory.getLogger(AppUtilImpl.class);
     @Autowired
     private DateValidator dateValidator;
@@ -46,5 +47,19 @@ public class AppUtilImpl implements AppUtil {
         return Period.between(startOdt.toLocalDate(), endOdt.toLocalDate()).getYears();
     }
 
-
+    @Override
+    public CustomerDto getCustomerDto(Integer idCardNumber, String firstName, String lastName, String phoneNumber, Date birthDate, Date idCardExpiration, Integer associatedContract) {
+        CustomerDto customerDto = new CustomerDto(idCardNumber, firstName, lastName, phoneNumber, associatedContract);
+        customerDto.setBirthDate(dateUtil.parseString(birthDate));
+        customerDto.setIdCardExpiration(dateUtil.parseString(idCardExpiration));
+        return customerDto;
+    }
+    @Override
+    public String convertUppercase(String string) {
+        if (string == null || string.isEmpty()) {
+            return string;
+        } else {
+            return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+        }
+    }
 }

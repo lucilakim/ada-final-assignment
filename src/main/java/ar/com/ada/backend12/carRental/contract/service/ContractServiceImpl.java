@@ -25,18 +25,29 @@ public class ContractServiceImpl  implements ContractService{
     @Autowired
     CustomerDAO customerDAO;
 
+
     @Override
     public ContractInfo save(ContractBase contractBase, String carPlateId, Integer idCardNumber) {
-        Optional<Car> car = carDAO.findById(carPlateId);
-        if(car.isEmpty()){
-            throw new NotFoundException(String.format("There is no car registered with the plate id: %s", carPlateId));
+        Optional<Car> carOptional = carDAO.findById(carPlateId);
+        if(carOptional.isEmpty()) throw new NotFoundException(String.format("There is no car registered with the plate id: %s", carPlateId));
+        Optional<Customer> customerOptional = customerDAO.findById(idCardNumber);
+        if(customerOptional.isEmpty()) throw new NotFoundException(String.format("There is no customer registered with the id: %s", idCardNumber));
+
+        Car car = carOptional.get();
+        Customer customer = customerOptional.get();
+
+        if (car.getAssociatedContract() != null ){
+            throw new BadRequestException(String.format("The car with license plate %s cannot be hired as it is currently rented.", carPlateId));
         }
-        Optional<Customer> customer = customerDAO.findById(idCardNumber);
-        if(customer.isEmpty()){
-            throw new NotFoundException(String.format("There is no customer registered with the id: %s", idCardNumber));
+        if (customer.getAssociatedContract() != null){
+            throw new BadRequestException(String.format("We cannot open a new contract for you because you have one associated with your idCardNumber %s.", idCardNumber));
         }
+
         ContractBase returnedContract = contractDAO.save(contractBase);
-        return new ContractInfo(returnedContract,car.get());
+        Integer contractNumber = returnedContract.getContractNumber();
+        carDAO.setContractNumber(contractNumber, carPlateId);
+        customerDAO.setContractNumber(contractNumber, idCardNumber);
+        return new ContractInfo(returnedContract,car);
     }
 
     @Override
@@ -60,7 +71,6 @@ public class ContractServiceImpl  implements ContractService{
     public ContractFull getFullContract(ContractBase contractBase) {
         Optional<Car> car = carDAO.findById(contractBase.getCarPlateId());
         Optional<Customer> customer = customerDAO.findById(contractBase.getIdCardNumber());
-
         return new ContractFull(contractBase,car.get(), customer.get());
     }
 
@@ -80,9 +90,7 @@ public class ContractServiceImpl  implements ContractService{
              listContract.add(contractInfo);
         }
 
-        if(listContract.isEmpty()) {
-            throw new NotFoundException("No contracts found. The list of contracts is empty");
-        }
+        if(listContract.isEmpty()) throw new NotFoundException("No contracts found. The list of contracts is empty");
 
         return new ContractInfoList(listContract);
     }
@@ -90,14 +98,8 @@ public class ContractServiceImpl  implements ContractService{
     @Override
     public void update(Integer contractNumber, BigDecimal amountPaid) {
         Optional<ContractBase> contractBase = contractDAO.findById(contractNumber);
-
-        if(contractBase.isEmpty()) {
-            throw new NotFoundException("Contract: " + contractNumber + " not found.");
-        }
-
-        if(!contractBase.get().getRented()) {
-            throw new BadRequestException("Contract: " + contractNumber + " is not a current contract because it is closed.");
-        }
+        if(contractBase.isEmpty()) throw new NotFoundException("Contract: " + contractNumber + " not found.");
+        if(!contractBase.get().getRented()) throw new BadRequestException("Contract: " + contractNumber + " is not a current contract because it is closed.");
 
         Optional<Car> car = carDAO.findById(contractBase.get().getCarPlateId());
         ContractInfo contractInfo = new ContractInfo(contractBase.get(), car.get());
@@ -107,9 +109,11 @@ public class ContractServiceImpl  implements ContractService{
                     contractNumber, contractInfo.getTotalBalance(),amountPaid);
             throw new BadRequestException(message);
         }
-
+        Optional<Customer> customer = customerDAO.findById(contractBase.get().getIdCardNumber());
+        customer.ifPresent(value -> customerDAO.setContractNumber(null, value.getIdCardNumber()));
         contractBase.get().setRented(false);
         contractDAO.save(contractBase.get());
+        carDAO.setContractNumber(null, car.get().getCarPlateId());
     }
 
     @Override

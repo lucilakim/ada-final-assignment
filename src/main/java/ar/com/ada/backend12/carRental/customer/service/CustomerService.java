@@ -1,15 +1,16 @@
 package ar.com.ada.backend12.carRental.customer.service;
 
+import ar.com.ada.backend12.carRental.customer.dto.CustomerDto;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
-import ar.com.ada.backend12.carRental.customer.model.CustomerList;
+import ar.com.ada.backend12.carRental.customer.dto.CustomersDto;
 
-import java.util.Date;
 import java.util.Optional;
 
 public interface CustomerService {
-    public Customer save(Customer customer) ;
-    public Customer update(Customer customer);
+    public CustomerDto save(Customer customer) ;
+    public CustomerDto update(Customer customer);
     public Optional<Customer> get(Integer idCardNumber);
-    public CustomerList getAll();
+    public CustomerDto getReturnableCustomer(Integer idCardNumber);
+    public CustomersDto getAll();
     public void delete(Integer idCardNumber);
 }

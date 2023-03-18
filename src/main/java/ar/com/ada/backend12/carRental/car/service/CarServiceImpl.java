@@ -1,7 +1,6 @@
 package ar.com.ada.backend12.carRental.car.service;
 
 import ar.com.ada.backend12.carRental.car.DAO.CarDAO;
-import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.model.CarList;
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.contract.model.ContractBase;
@@ -64,12 +63,9 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public CarList getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent){
-        List<Car> cars = carDAO.getAll(carType, passengersNumber, airConditioning, dailyRent);
-        if (cars.isEmpty()) {
-            throw new NotFoundException("The list of cars (with the filters) is empty.");
-        }
-
+    public CarList getAll(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent, String onlyAvailable){
+        List<Car> cars = carDAO.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
+        if (cars.isEmpty()) throw new NotFoundException("The list of cars (with the filters) is empty.");
         return new CarList(cars);
     }
 
@@ -82,7 +78,7 @@ public class CarServiceImpl implements CarService{
 
         Optional<ContractBase> contractBase = contractService.getByCarPlateId(car.get().getCarPlateId());
         if(contractBase.isPresent()) {
-            throw new BadRequestException(String.format("The car: %s cannot be deleted because it has this contract associated: %s.", car.get().getCarPlateId(), contractBase.get().getContractNumber()));
+            throw new BadRequestException(String.format("The car: %s cannot be deleted because it has/had this contract associated: %s.", car.get().getCarPlateId(), contractBase.get().getContractNumber()));
         }
 
         carDAO.delete(car.get());

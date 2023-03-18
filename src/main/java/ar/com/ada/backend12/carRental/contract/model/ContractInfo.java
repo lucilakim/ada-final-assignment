@@ -1,9 +1,7 @@
 package ar.com.ada.backend12.carRental.contract.model;
 
 import ar.com.ada.backend12.carRental.car.model.Car;
-import ar.com.ada.backend12.carRental.customer.model.Customer;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.math.BigDecimal;
 import java.util.Date;

@@ -1,7 +1,6 @@
 package ar.com.ada.backend12.carRental.util.date;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.util.date.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,10 @@ public class DateUtilImp implements DateUtil {
     @Autowired
     public DateUtilImp() {
         super();
+    }
+
+    public DateUtilImp(DateFormat sdf) {
+        this.sdf = sdf;
     }
 
     /**
@@ -60,6 +63,7 @@ public class DateUtilImp implements DateUtil {
      */
     @Override
     public String parseString(Date date) {
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);
     }
 }

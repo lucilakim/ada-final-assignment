@@ -2,10 +2,10 @@ package ar.com.ada.backend12.carRental.car.controller;
 
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.car.model.CarList;
-import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.service.CarService;
 import ar.com.ada.backend12.carRental.car.dto.PatchCarReqBody;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
+import ar.com.ada.backend12.carRental.util.api.ApiUtil;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
 import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import ar.com.ada.backend12.carRental.util.date.DateUtil;
@@ -28,6 +28,8 @@ public class CarController {
     private CarService carService;
     @Autowired
     DateUtil dateUtil;
+    @Autowired
+    ApiUtil apiUtil;
 
     @PostMapping("/car")
     public ResponseEntity<ApiReturnable> save(
@@ -43,6 +45,12 @@ public class CarController {
             @RequestParam(name = "dailyRent") BigDecimal dailyRent
     ) {
         CarValidator.validateSaveInputs(carPlateId, brand, model, color, carType, passengersNumber, mileage, airConditioning, dailyRent);
+        final String CAR_TYPE_EXCEPTION = "suv";
+        final String BRAND_EXCEPTION  = "bmw";
+        carType = (!carType.toLowerCase().equals(CAR_TYPE_EXCEPTION)) ? apiUtil.convertUppercase(carType) : carType.toUpperCase();
+        brand = (!brand.toLowerCase().equals(BRAND_EXCEPTION)) ? apiUtil.convertUppercase(brand) : brand.toUpperCase();
+        carPlateId = carPlateId.toUpperCase();
+
         logger.info("Trying to insert a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
         Car c = new Car(carPlateId, brand, model, year, color, carType, passengersNumber, mileage, airConditioning, dailyRent);
@@ -55,10 +63,21 @@ public class CarController {
             @PathVariable(name = "carPlateId") String carPlateId,
             @RequestBody PatchCarReqBody body
     ) {
-        CarValidator.validateUpdateInputs(carPlateId, body.getBrand(), body.getModel(), body.getColor(), body.getCarType(), body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
+        Optional<Car> carOptional = carService.get(carPlateId);
+        Integer lastMileage = 0;
+        if (carOptional.isPresent()) lastMileage = carOptional.get().getMileage();
+        CarValidator.validateUpdateInputs(carPlateId, body.getBrand(), body.getModel(), body.getColor(), body.getCarType(),
+                body.getPassengersNumber(), body.getMileage(), lastMileage, body.getAirConditioning(), body.getDailyRent());
+        final String CAR_TYPE_EXCEPTION = "suv";
+        final String BRAND_EXCEPTION  = "bmw";
+        String carType = body.getCarType();
+        String brand = body.getBrand();
+        carType = (!carType.toLowerCase().equals(CAR_TYPE_EXCEPTION)) ? apiUtil.convertUppercase(carType) : carType.toUpperCase();
+        brand = (!brand.toLowerCase().equals(BRAND_EXCEPTION)) ? apiUtil.convertUppercase(brand) : brand.toUpperCase();
+
         logger.info("Trying to update a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
-        Car car = new Car(carPlateId, body.getBrand(), body.getModel(), body.getYear(), body.getColor(), body.getCarType(), body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
+        Car car = new Car(carPlateId, brand, body.getModel(), body.getYear(), body.getColor(), carType, body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
         Car updatedCar = carService.update(carPlateId, car);
         return new ResponseEntity<>(updatedCar, HttpStatus.OK);
     }
@@ -79,12 +98,13 @@ public class CarController {
             @RequestParam(name = "carType", required = false) String carType,
             @RequestParam(name = "passengersNumber", required = false) Integer passengersNumber,
             @RequestParam(name = "airConditioning", required = false) String airConditioning,
-            @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent
-            //,@RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
+            @RequestParam(name = "dailyRent", required = false) BigDecimal dailyRent,
+            @RequestParam(name = "onlyAvailable", required = false) String onlyAvailable
     ) {
-        CarValidator.validateGetAllInput(carType, passengersNumber, airConditioning, dailyRent);
+        onlyAvailable = (onlyAvailable != null) ?  onlyAvailable.trim().toLowerCase() : "yes";
+        CarValidator.validateGetAllInput(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
         logger.info("Trying to get all Cars in the database.");
-        CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent);
+        CarList carList = carService.getAll(carType, passengersNumber, airConditioning, dailyRent, onlyAvailable);
         return new ResponseEntity<>(carList, HttpStatus.OK);
     }
 

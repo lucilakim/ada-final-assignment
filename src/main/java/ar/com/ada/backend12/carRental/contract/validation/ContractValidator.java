@@ -1,6 +1,6 @@
 package ar.com.ada.backend12.carRental.contract.validation;
 
-import ar.com.ada.backend12.carRental.util.api.AppUtil;
+import ar.com.ada.backend12.carRental.util.api.ApiUtil;
 import ar.com.ada.backend12.carRental.util.api.AppUtilImpl;
 import ar.com.ada.backend12.carRental.car.validation.CarValidator;
 import ar.com.ada.backend12.carRental.customer.validation.CustomerValidator;
@@ -19,7 +19,7 @@ public class ContractValidator {
     static Logger logger = LoggerFactory.getLogger(CustomerValidator.class);
     static DateUtil DATE_UTIL = new DateUtilImp();
     static DateValidator DATE_VALIDATOR = new DateValidatorImpl(DATE_UTIL);
-    static AppUtil CUSTOMER_UTIL = new AppUtilImpl(DATE_VALIDATOR, DATE_UTIL);
+    static ApiUtil CUSTOMER_UTIL = new AppUtilImpl(DATE_VALIDATOR, DATE_UTIL);
 
     public static void validateSaveInputs(String carPlateId, Integer idCardNumber, String stringStartDay, Integer duration, BigDecimal amountPaid, BigDecimal dailyRent) {
         CarValidator.validateCarPlateId(carPlateId);

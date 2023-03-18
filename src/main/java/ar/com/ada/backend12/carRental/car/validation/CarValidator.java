@@ -10,8 +10,9 @@ import java.util.Set;
 public class CarValidator {
     private static final String CAR_PLATE_REGEX = "^[A-Za-z]{3}[0-9]{3}$";
     private static final Set<String> CAR_TYPES = new HashSet<>(Arrays.asList("sedan", "hatchback", "suv", "van"));
-    private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("Audi", "BMW", "renault", "lexus", "ford", "bmw", "honda", "toyota"));
-    private static final Set<String> AIR_CONDITIONING_VALUES = new HashSet<>(Arrays.asList("yes", "no"));
+    private static final Set<String> AVAILABLE = new HashSet<>(Arrays.asList("yes", "no"));
+    private static final Set<String> CAR_BRANDS = new HashSet<>(Arrays.asList("audi", "bmw", "renault", "lexus", "ford", "bmw", "honda", "toyota"));
+
 
     public static void validateSaveInputs(String carPlateId, String brand, String model, String color, String carType,
                                           Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent){
@@ -26,24 +27,31 @@ public class CarValidator {
         validateDailyRent(dailyRent);
     }
     public static void validateUpdateInputs(String carPlateId, String brand, String model,String color,String carType,
-                                            Integer passengersNumber, Integer mileage, String airConditioning,BigDecimal dailyRent) {
+                                            Integer passengersNumber, Integer newMileage, Integer lastMileage, String airConditioning,BigDecimal dailyRent) {
         validateCarPlateId(carPlateId);
         validateBrandNotRequired(brand);
         validateModelNotRequired(model);
         validateColorNotRequired(color);
         validateCarTypeNotRequired(carType);
         validatePassengerNumber(passengersNumber);
-        validateMileage(mileage);
+        validateMileageUpdate(newMileage, lastMileage);
         validateAirConditioningNotRequired(airConditioning);
         validateDailyRent(dailyRent);
     }
-    public static void validateGetAllInput(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent) {
+    public static void validateGetAllInput(String carType, Integer passengersNumber, String airConditioning, BigDecimal dailyRent, String onlyAvailable) {
         validateCarTypeNotRequired(carType);
         validatePassengerNumber(passengersNumber);
         validateAirConditioningNotRequired(airConditioning);
         validateDailyRent(dailyRent);
+        validateOnlyAvailable(onlyAvailable);
     }
 
+    private static void validateOnlyAvailable(String onlyAvailable) {
+        if(onlyAvailable != null) {
+            validateCondition(AVAILABLE.contains(onlyAvailable),
+                    "The value of the parameter onlyAvailable is not valid. The options are Yes or No.");
+        }
+    }
     private static void validateCondition(boolean condition, String errorMessage) {
         if (!condition) {
             throw new BadRequestException(errorMessage);
@@ -78,12 +86,12 @@ public class CarValidator {
 
     private static void validateColor(String color) {
         validateColorNotRequired(color);
-        validateCondition(color != null, "The brand field cannot be empty or null.");
+        validateCondition(color != null, "The color field cannot be empty or null.");
     }
     private static void validateColorNotRequired(String color) {
         if (color != null) {
             color = color.trim().toLowerCase();
-            validateCondition(color == null || !color.equals(""), "The model field cannot be empty or null.");
+            validateCondition(!color.equals(""), "The color field cannot be empty or null.");
         }
     }
 
@@ -113,13 +121,18 @@ public class CarValidator {
 
     private static void validatePassengerNumber(Integer passengersNumber) {
         if (passengersNumber != null) {
-            validateCondition(passengersNumber > 1, "The passengers number should be greater than 0.");
+            validateCondition(passengersNumber > 1, "The passengers number should be greater than 1.");
         }
     }
 
     private static void validateMileage(Integer mileage) {
         if (mileage != null) {
-            validateCondition(mileage >= 0, "The mileage should be greater than 0.");
+            validateCondition(mileage >= 0, "The mileage should be greater or equal to 0.");
+        }
+    }
+    private static void validateMileageUpdate(Integer newMileage, Integer lastMileage) {
+        if (newMileage != null && lastMileage != null) {
+            validateCondition(newMileage > lastMileage, String.format("To upgrade the mileage, the mileage must be greater than or equal to the mileage already entered: %s.", lastMileage));
         }
     }
 
@@ -131,13 +144,13 @@ public class CarValidator {
         if (airConditioning != null) {
             airConditioning = airConditioning.trim().toLowerCase();
             validateCondition(!airConditioning.equals(""), "The airConditioning field cannot be empty or null.");
-            validateCondition(AIR_CONDITIONING_VALUES.contains(airConditioning), "The air conditioning value is not valid. The options are yes or no.");
+            validateCondition(AVAILABLE.contains(airConditioning), "The air conditioning value is not valid. The options are yes or no.");
         }
     }
 
     private static void validateDailyRent(BigDecimal dailyRent) {
         if (dailyRent != null) {
-            validateCondition(dailyRent.compareTo(BigDecimal.valueOf(0)) >= 0, "The daily rent should be greater than 0");
+            validateCondition(dailyRent.compareTo(BigDecimal.valueOf(0)) > 0, "The daily rent should be greater than 0");
         }
     }
 }

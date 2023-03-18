@@ -31,10 +31,17 @@ public class Car implements ApiReturnable {
     @Column(name = "DAILY_RENT")
     private BigDecimal dailyRent;
 
+    @Column(name = "ASSOCIATED_CONTRACT")
+    private Integer associatedContract;
+
     public Car() {
     }
 
     public Car(String carPlateId, String brand, String model, Year year, String color, String carType, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent) {
+        this(carPlateId, brand, model, year, color, carType, passengersNumber, mileage, airConditioning, dailyRent, null);
+    }
+
+    public Car(String carPlateId, String brand, String model, Year year, String color, String carType, Integer passengersNumber, Integer mileage, String airConditioning, BigDecimal dailyRent, Integer associatedContract) {
         this.carPlateId = carPlateId;
         this.brand = brand;
         this.model = model;
@@ -45,6 +52,7 @@ public class Car implements ApiReturnable {
         this.mileage = mileage;
         this.airConditioning = airConditioning;
         this.dailyRent = dailyRent;
+        this.associatedContract = associatedContract;
     }
 
     public String getCarPlateId() {
@@ -125,5 +133,13 @@ public class Car implements ApiReturnable {
 
     public void setDailyRent(BigDecimal dailyRent) {
         this.dailyRent = dailyRent;
+    }
+
+    public Integer getAssociatedContract() {
+        return associatedContract;
+    }
+
+    public void setAssociatedContract(Integer associatedContract) {
+        this.associatedContract = associatedContract;
     }
 }

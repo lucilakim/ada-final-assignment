@@ -1,10 +1,11 @@
 package ar.com.ada.backend12.carRental.customer.controller;
 
 import ar.com.ada.backend12.carRental.car.controller.CarController;
-import ar.com.ada.backend12.carRental.util.api.AppUtil;
+import ar.com.ada.backend12.carRental.customer.dto.CustomerDto;
+import ar.com.ada.backend12.carRental.util.api.ApiUtil;
 import ar.com.ada.backend12.carRental.customer.dto.PatchCustomerReqBody;
 import ar.com.ada.backend12.carRental.customer.model.Customer;
-import ar.com.ada.backend12.carRental.customer.model.CustomerList;
+import ar.com.ada.backend12.carRental.customer.dto.CustomersDto;
 import ar.com.ada.backend12.carRental.customer.service.CustomerService;
 import ar.com.ada.backend12.carRental.customer.validation.CustomerValidator;
 import ar.com.ada.backend12.carRental.util.api.message.ApiMessage;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.Optional;
 
 @RestController
 public class CustomerController {
@@ -33,7 +33,7 @@ public class CustomerController {
     @Autowired
     private DateUtil dateUtil;
     @Autowired
-    AppUtil appUtil;
+    ApiUtil apiUtil;
 
     @PostMapping("/customer")
     private ResponseEntity<ApiReturnable> save(
@@ -45,13 +45,13 @@ public class CustomerController {
             , @RequestParam(name = "phoneNumber") String phoneNumber
     ) {
         CustomerValidator.validateSaveInputs(idCardNumber, firstName, lastName, stringBirthDate, stringIdCardExpiration, phoneNumber);
-        Date birthDate = appUtil.parseDate(stringBirthDate);
-        Date idCardExpiration = appUtil.parseDate(stringIdCardExpiration);
+        Date birthDate = apiUtil.parseDate(stringBirthDate);
+        Date idCardExpiration = apiUtil.parseDate(stringIdCardExpiration);
 
         logger.info("Trying to insert a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
         Customer customer = new Customer(idCardNumber, firstName, lastName, birthDate, idCardExpiration, phoneNumber);
-        Customer customerSaved = customerService.save(customer);
+        CustomerDto customerSaved = customerService.save(customer);
         return new ResponseEntity<ApiReturnable>(customerSaved, HttpStatus.OK);
     }
 
@@ -63,14 +63,15 @@ public class CustomerController {
         CustomerValidator.validateUpdateInputs(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(),
                 customerBody.getBirthDate(), customerBody.getIdCardExpiration(), customerBody.getPhoneNumber());
         Date birthDate = null;
-        if (customerBody.getBirthDate() != null) birthDate = appUtil.parseDate(customerBody.getBirthDate());
-        Date idCardExpiration = appUtil.parseDate(customerBody.getIdCardExpiration());
+        if (customerBody.getBirthDate() != null) birthDate = apiUtil.parseDate(customerBody.getBirthDate());
+        Date idCardExpiration = null;
+        if (customerBody.getIdCardExpiration() != null) idCardExpiration = apiUtil.parseDate(customerBody.getIdCardExpiration());
 
         logger.info("Trying to update a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
         Customer customer = new Customer(idCardNumber, customerBody.getFirstName(), customerBody.getLastName(), birthDate, idCardExpiration, customerBody.getPhoneNumber());
-        Customer updatedCustomer = customerService.update(customer);
-        return new ResponseEntity<ApiReturnable>(updatedCustomer, HttpStatus.OK);
+        CustomerDto customerDto = customerService.update(customer);
+        return new ResponseEntity<ApiReturnable>(customerDto, HttpStatus.OK);
     }
 
     @GetMapping("/customer/{idCardNumber}")
@@ -80,15 +81,15 @@ public class CustomerController {
         CustomerValidator.validateIdCardNumber(idCardNumber);
         logger.info("Trying to get a customer");
         logger.debug(String.format("idCardNumber [ %s ]", idCardNumber));
-        Optional<Customer> customer = customerService.get(idCardNumber);
-        return new ResponseEntity<ApiReturnable>(customer.get(), HttpStatus.OK);
+        CustomerDto customerDto = customerService.getReturnableCustomer(idCardNumber);
+        return new ResponseEntity<ApiReturnable>(customerDto, HttpStatus.OK);
     }
 
     @GetMapping("/customer")
     private ResponseEntity<ApiReturnable> getAll() {
         logger.info("Trying to get all the customers");
-        CustomerList customerList = customerService.getAll();
-        return new ResponseEntity<ApiReturnable>(customerList, HttpStatus.OK);
+        CustomersDto customersDto = customerService.getAll();
+        return new ResponseEntity<ApiReturnable>(customersDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/customer/{idCardNumber}")

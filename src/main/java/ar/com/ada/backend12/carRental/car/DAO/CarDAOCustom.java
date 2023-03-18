@@ -11,6 +11,6 @@ public interface CarDAOCustom {
             , Integer passengersNumber
             , String airConditioning
             , BigDecimal dailyRent
-            //, String onlyAvailable
+            , String onlyAvailable
     );
 }
