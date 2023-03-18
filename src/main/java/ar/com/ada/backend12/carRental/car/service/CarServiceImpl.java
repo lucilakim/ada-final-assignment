@@ -78,7 +78,7 @@ public class CarServiceImpl implements CarService{
 
         Optional<ContractBase> contractBase = contractService.getByCarPlateId(car.get().getCarPlateId());
         if(contractBase.isPresent()) {
-            throw new BadRequestException(String.format("The car: %s cannot be deleted because it has this contract associated: %s.", car.get().getCarPlateId(), contractBase.get().getContractNumber()));
+            throw new BadRequestException(String.format("The car: %s cannot be deleted because it has/had this contract associated: %s.", car.get().getCarPlateId(), contractBase.get().getContractNumber()));
         }
 
         carDAO.delete(car.get());

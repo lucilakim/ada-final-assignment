@@ -63,10 +63,21 @@ public class CarController {
             @PathVariable(name = "carPlateId") String carPlateId,
             @RequestBody PatchCarReqBody body
     ) {
-        CarValidator.validateUpdateInputs(carPlateId, body.getBrand(), body.getModel(), body.getColor(), body.getCarType(), body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
+        Optional<Car> carOptional = carService.get(carPlateId);
+        Integer lastMileage = 0;
+        if (carOptional.isPresent()) lastMileage = carOptional.get().getMileage();
+        CarValidator.validateUpdateInputs(carPlateId, body.getBrand(), body.getModel(), body.getColor(), body.getCarType(),
+                body.getPassengersNumber(), body.getMileage(), lastMileage, body.getAirConditioning(), body.getDailyRent());
+        final String CAR_TYPE_EXCEPTION = "suv";
+        final String BRAND_EXCEPTION  = "bmw";
+        String carType = body.getCarType();
+        String brand = body.getBrand();
+        carType = (!carType.toLowerCase().equals(CAR_TYPE_EXCEPTION)) ? apiUtil.convertUppercase(carType) : carType.toUpperCase();
+        brand = (!brand.toLowerCase().equals(BRAND_EXCEPTION)) ? apiUtil.convertUppercase(brand) : brand.toUpperCase();
+
         logger.info("Trying to update a Car in the database.");
         logger.debug(String.format("carPlateId [ %s ].", carPlateId));
-        Car car = new Car(carPlateId, body.getBrand(), body.getModel(), body.getYear(), body.getColor(), body.getCarType(), body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
+        Car car = new Car(carPlateId, brand, body.getModel(), body.getYear(), body.getColor(), carType, body.getPassengersNumber(), body.getMileage(), body.getAirConditioning(), body.getDailyRent());
         Car updatedCar = carService.update(carPlateId, car);
         return new ResponseEntity<>(updatedCar, HttpStatus.OK);
     }

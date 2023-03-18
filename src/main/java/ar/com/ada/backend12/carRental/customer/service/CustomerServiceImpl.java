@@ -114,7 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Optional<ContractBase> contractBase = contractService.getByIdCardNumber(customer.get().getIdCardNumber());
         if(contractBase.isPresent()) {
-            throw new BadRequestException(String.format("The customer: %s cannot be deleted because it has this contract associated: %s.", idCardNumber, contractBase.get().getContractNumber()));
+            throw new BadRequestException(String.format("The customer: %s cannot be deleted because it has/had this contract associated: %s.", idCardNumber, contractBase.get().getContractNumber()));
         }
 
         customerDAO.delete(customer.get());

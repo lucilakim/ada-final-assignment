@@ -44,7 +44,7 @@ public class CustomerValidator {
     public static void validateIdCardNumber(Integer idCardNumber) {
         if (idCardNumber != null) {
             validateCondition(idCardNumber > 100000000 && idCardNumber < 1000000000,
-                    "The format of the id card number is incorrect. It should contain 9 numbers.");
+                    "The format of the id card number is incorrect. It should contain 9 numbers, and it can not begin with 0.");
         }
     }
 
