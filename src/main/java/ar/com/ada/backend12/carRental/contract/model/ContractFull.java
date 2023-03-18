@@ -35,19 +35,8 @@ public class ContractFull extends ContractInfo {
     @Override
     public String toString() {
         return "ContractFull{" +
-                " contractNumber=" + contractNumber +
-                ", isRented=" + isRented +
-                ", car=" + car +
+                "car=" + car +
                 ", customer=" + customer +
-                ", startDay=" + startDay +
-                ", duration=" + duration +
-                ", dailyRent=" + dailyRent +
-                ", balance=" + balance +
-                ", amountPaid=" + amountPaid +
-                ", amountDue=" + amountDue +
-                ", arrearsDays=" + arrearsDays +
-                ", arrearsDue=" + arrearsDue +
-                ", totalBalance=" + totalBalance +
                 '}';
     }
 }

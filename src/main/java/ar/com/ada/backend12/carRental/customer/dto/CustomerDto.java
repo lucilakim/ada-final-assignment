@@ -10,21 +10,23 @@ public class CustomerDto implements ApiReturnable {
     private String birthDate;
     private String idCardExpiration;
     private String phoneNumber;
+    private Integer associatedContract;
 
     public CustomerDto() {
     }
 
-    public CustomerDto(Integer idCardNumber, String firstName, String lastName, String phoneNumber) {
-        this(idCardNumber, firstName, lastName, null, null, phoneNumber);
+    public CustomerDto(Integer idCardNumber, String firstName, String lastName, String phoneNumber, Integer associatedContract) {
+        this(idCardNumber, firstName, lastName, null, null, phoneNumber, associatedContract);
     }
 
-    public CustomerDto(Integer idCardNumber, String firstName, String lastName, String birthDate, String idCardExpiration, String phoneNumber) {
+    public CustomerDto(Integer idCardNumber, String firstName, String lastName, String birthDate, String idCardExpiration, String phoneNumber, Integer associatedContract) {
         this.idCardNumber = idCardNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.idCardExpiration = idCardExpiration;
         this.phoneNumber = phoneNumber;
+        this.associatedContract = associatedContract;
     }
 
     public Integer getIdCardNumber() {
@@ -73,5 +75,13 @@ public class CustomerDto implements ApiReturnable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Integer getAssociatedContract() {
+        return associatedContract;
+    }
+
+    public void setAssociatedContract(Integer associatedContract) {
+        this.associatedContract = associatedContract;
     }
 }

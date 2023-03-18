@@ -39,7 +39,8 @@ public class CustomerServiceImpl implements CustomerService {
         }
         Customer returnedCustomer = customerDAO.save(c);
         CustomerDto customerDto = apiUtil.getCustomerDto(returnedCustomer.getIdCardNumber(), returnedCustomer.getFirstName(),
-                returnedCustomer.getLastName(), returnedCustomer.getPhoneNumber(), returnedCustomer.getBirthDate(), returnedCustomer.getIdCardExpiration());
+                returnedCustomer.getLastName(), returnedCustomer.getPhoneNumber(), returnedCustomer.getBirthDate(),
+                returnedCustomer.getIdCardExpiration(), returnedCustomer.getAssociatedContract());
         return customerDto;
     }
 
@@ -59,7 +60,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer returnedCustomer = customerDAO.save(updatedCustomer);
         CustomerDto customerDto = apiUtil.getCustomerDto(returnedCustomer.getIdCardNumber(), returnedCustomer.getFirstName(),
-                returnedCustomer.getLastName(), returnedCustomer.getPhoneNumber(), returnedCustomer.getBirthDate(), returnedCustomer.getIdCardExpiration());
+                returnedCustomer.getLastName(), returnedCustomer.getPhoneNumber(), returnedCustomer.getBirthDate(),
+                returnedCustomer.getIdCardExpiration(), returnedCustomer.getAssociatedContract());
         return customerDto;
     }
 
@@ -72,13 +74,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto getReturnableCustomer(Integer idCardNumber) {
-        Optional<Customer> customer = customerDAO.findById(idCardNumber);
-        if(customer.isEmpty()) throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
+        Optional<Customer> customerOptional = customerDAO.findById(idCardNumber);
+        if(customerOptional.isEmpty()) throw new NotFoundException(String.format("The client with ID number: %s was not found", idCardNumber));
 
+        Customer customer = customerOptional.get();
 
-        CustomerDto customerDto = new CustomerDto(idCardNumber, customer.get().getFirstName(), customer.get().getLastName(), customer.get().getPhoneNumber());
-        customerDto.setBirthDate(dateUtil.parseString(customer.get().getBirthDate()));
-        customerDto.setIdCardExpiration(dateUtil.parseString(customer.get().getIdCardExpiration()));
+        CustomerDto customerDto = new CustomerDto(idCardNumber, customer.getFirstName(),
+                customer.getLastName(), customer.getPhoneNumber(), customer.getAssociatedContract());
+        customerDto.setBirthDate(dateUtil.parseString(customer.getBirthDate()));
+        customerDto.setIdCardExpiration(dateUtil.parseString(customer.getIdCardExpiration()));
         return customerDto;
     }
 
@@ -92,8 +96,9 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerDto customerDto = null;
         for (int i = 0; i < customers.size(); i++) {
             customer = customers.get(i);
-            customerDto = apiUtil.getCustomerDto(customer.getIdCardNumber(), customer.getFirstName(), customer.getLastName(),
-                    customer.getPhoneNumber(), customer.getBirthDate(), customer.getIdCardExpiration());
+            customerDto = apiUtil.getCustomerDto(customer.getIdCardNumber(), customer.getFirstName(),
+                    customer.getLastName(), customer.getPhoneNumber(), customer.getBirthDate(),
+                    customer.getIdCardExpiration(), customer.getAssociatedContract());
             dto.add(customerDto);
         }
         CustomersDto customersDto = new CustomersDto(dto);

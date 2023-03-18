@@ -1,8 +1,11 @@
 package ar.com.ada.backend12.carRental.contract.service;
 
+import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.contract.model.*;
+import ar.com.ada.backend12.carRental.exception.NotFoundException;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 public interface ContractService {

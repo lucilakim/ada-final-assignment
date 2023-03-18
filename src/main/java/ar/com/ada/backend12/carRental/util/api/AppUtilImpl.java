@@ -48,8 +48,8 @@ public class AppUtilImpl implements ApiUtil {
     }
 
     @Override
-    public CustomerDto getCustomerDto(Integer idCardNumber, String firstName, String lastName, String phoneNumber, Date birthDate, Date idCardExpiration) {
-        CustomerDto customerDto = new CustomerDto(idCardNumber, firstName, lastName, phoneNumber);
+    public CustomerDto getCustomerDto(Integer idCardNumber, String firstName, String lastName, String phoneNumber, Date birthDate, Date idCardExpiration, Integer associatedContract) {
+        CustomerDto customerDto = new CustomerDto(idCardNumber, firstName, lastName, phoneNumber, associatedContract);
         customerDto.setBirthDate(dateUtil.parseString(birthDate));
         customerDto.setIdCardExpiration(dateUtil.parseString(idCardExpiration));
         return customerDto;

@@ -1,7 +1,6 @@
 package ar.com.ada.backend12.carRental.car.service;
 
 import ar.com.ada.backend12.carRental.car.DAO.CarDAO;
-import ar.com.ada.backend12.carRental.car.model.CarBrands;
 import ar.com.ada.backend12.carRental.car.model.CarList;
 import ar.com.ada.backend12.carRental.car.model.Car;
 import ar.com.ada.backend12.carRental.contract.model.ContractBase;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service

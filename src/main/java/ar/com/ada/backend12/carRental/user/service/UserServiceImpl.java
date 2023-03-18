@@ -1,7 +1,6 @@
 package ar.com.ada.backend12.carRental.user.service;
 
 import ar.com.ada.backend12.carRental.exception.BadRequestException;
-import ar.com.ada.backend12.carRental.exception.NotFoundException;
 import ar.com.ada.backend12.carRental.exception.UnauthorizedException;
 import ar.com.ada.backend12.carRental.user.DAO.UserDAO;
 import ar.com.ada.backend12.carRental.user.model.User;

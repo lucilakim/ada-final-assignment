@@ -4,6 +4,7 @@ import ar.com.ada.backend12.carRental.util.api.ApiReturnable;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "CUSTOMER")
@@ -23,16 +24,24 @@ public class Customer implements ApiReturnable {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
+    @Column(name = "ASSOCIATED_CONTRACT")
+    private Integer associatedContract;
+
     public Customer() {
     }
 
     public Customer(Integer idCardNumber, String firstName, String lastName, Date birthDate, Date idCardExpiration, String phoneNumber) {
+        this(idCardNumber, firstName, lastName, birthDate, idCardExpiration, phoneNumber, null);
+    }
+
+    public Customer(Integer idCardNumber, String firstName, String lastName, Date birthDate, Date idCardExpiration, String phoneNumber, Integer associatedContract) {
         this.idCardNumber = idCardNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.idCardExpiration = idCardExpiration;
         this.phoneNumber = phoneNumber;
+        this.associatedContract = associatedContract;
     }
 
     public Integer getIdCardNumber() {
@@ -83,6 +92,27 @@ public class Customer implements ApiReturnable {
         this.phoneNumber = phoneNumber;
     }
 
+    public Integer getAssociatedContract() {
+        return associatedContract;
+    }
+
+    public void setAssociatedContract(Integer associatedContract) {
+        this.associatedContract = associatedContract;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(idCardNumber, customer.idCardNumber) && Objects.equals(firstName, customer.firstName) && Objects.equals(lastName, customer.lastName) && Objects.equals(birthDate, customer.birthDate) && Objects.equals(idCardExpiration, customer.idCardExpiration) && Objects.equals(phoneNumber, customer.phoneNumber) && Objects.equals(associatedContract, customer.associatedContract);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idCardNumber, firstName, lastName, birthDate, idCardExpiration, phoneNumber, associatedContract);
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -92,6 +122,7 @@ public class Customer implements ApiReturnable {
                 ", birthDate=" + birthDate +
                 ", idCardExpiration=" + idCardExpiration +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", associatedContract=" + associatedContract +
                 '}';
     }
 }
